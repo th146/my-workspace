@@ -24,14 +24,15 @@ export class AppointmentsService {
   getAll(): Observable<Appointment[]> {
     return this.httpClient.get<Appointment[]>('my-workspace/appointments');
   }
-
+  
   getById(id: number): Observable<Appointment> {
     return this.httpClient.get<Appointment>(`my-workspace/appointments/${id}`);
   }
-
+  
   updateAppointment(id: number, appointment: Partial<Appointment>): Observable<Appointment> {
     return this.httpClient.patch<Appointment>(`my-workspace/appointments/${id}`, appointment);
   }
+  
 
   getOpeningHoursPerBranch(): Observable<OpeningHoursPerBranch> {
     return of(this.openingHoursPerBranch);
