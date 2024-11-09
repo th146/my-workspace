@@ -16,7 +16,7 @@ export class AppointmentsService {
     return this.appointments.find(a => a.id === id);
   }
 
-  updateAppointments(id: number, appointment: Partial<Appointment>): Appointment {
+  updateAppointment(id: number, appointment: Partial<Appointment>): Appointment {
     const canidate: Appointment | undefined = this.appointments.find((a) => a.id === id);
     if (canidate === undefined) {
         throw new Error(`no appointment with id ${id} found.`)

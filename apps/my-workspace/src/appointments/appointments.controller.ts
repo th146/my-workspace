@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
-import { Appointment } from 'libs/api-interfaces/src/lib/api-interfaces';
+import { Appointment } from '@my-workspace/api-interfaces'
 
 @Controller('appointments')
 export class AppointmentsController {

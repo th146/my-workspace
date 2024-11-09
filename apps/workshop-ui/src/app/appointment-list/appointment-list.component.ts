@@ -14,6 +14,7 @@ import { AppointmentsService } from '../appointments.service';
           <li *ngFor="let appointment of appointments$ | async">
               <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
                  [routerLink]="[appointment.id]">{{appointment.vehicleOwner}} - {{appointment.vehicleRegNo}}</a>
+
           </li>
       </ul> `,
   styles: [],
