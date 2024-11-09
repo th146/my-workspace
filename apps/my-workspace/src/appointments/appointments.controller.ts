@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { Appointment } from '@my-workspace/api-interfaces';
 import { AppointmentsService } from './appointments.service';
 
@@ -23,6 +23,11 @@ export class AppointmentsController {
     return canidate
   }
 
+  @Post('create-appointment')
+  createAppointment(@Body() createAppointmentDto: Appointment): Promise<Appointment> {
+    return this.appointmentService.createAppointment(createAppointmentDto);
+  }
+
   @Patch(':id')
   async updateAppointment(
     @Param('id', ParseIntPipe) id: number,
@@ -34,4 +39,6 @@ export class AppointmentsController {
       throw new HttpException(e?.message, HttpStatus.NOT_FOUND);
     }
   }
+
+
 }

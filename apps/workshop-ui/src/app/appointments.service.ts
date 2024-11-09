@@ -28,6 +28,10 @@ export class AppointmentsService {
   getById(id: number): Observable<Appointment> {
     return this.httpClient.get<Appointment>(`my-workspace/appointments/${id}`);
   }
+
+  createAppointment(appointment: Appointment): Observable<Appointment> {
+    return this.httpClient.post<Appointment>(`my-workspace/appointments/create-appointment`, appointment);
+  }
   
   updateAppointment(id: number, appointment: Partial<Appointment>): Observable<Appointment> {
     return this.httpClient.patch<Appointment>(`my-workspace/appointments/${id}`, appointment);

@@ -19,6 +19,13 @@ export class AppointmentsService {
     return this.appointmentsRepo.findOne({where: {id}})
   }
 
+  // Backend-Methode für das Erstellen eines Termins
+  async createAppointment(createAppointmentDto: Appointment): Promise<Appointment> {
+    const newAppointment = this.appointmentsRepo.create(createAppointmentDto);
+    return this.appointmentsRepo.save(newAppointment);
+  }
+
+
   async updateAppointment(id: number, appointment: Partial<Appointment>): Promise<Appointment> {
     const candidate = await this.getById(id);
 

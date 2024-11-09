@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Appointment } from '@my-workspace/api-interfaces';
@@ -19,7 +19,7 @@ import { AppointmentsService } from '../appointments.service';
       </ul> `,
   styles: [],
 })
-export class AppointmentListComponent {
+export class AppointmentListComponent implements OnInit {
   appointments$!: Observable<Appointment[]>;
 
   constructor(private readonly appointmentsService: AppointmentsService) { }
@@ -27,4 +27,6 @@ export class AppointmentListComponent {
   ngOnInit(): void {
     this.appointments$ = this.appointmentsService.getAll();
   }
+
+  
 }
