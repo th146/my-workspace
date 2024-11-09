@@ -1,10 +1,13 @@
+import { DataSource } from 'typeorm';
+import { AppointmentsEntity } from './src/appointments/appointments.entity';
+
 export default new DataSource({
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
-    password: 'Password1!',
-    database: 'workshop-db',
-    // the entity definition will be added later:
-    entities: [],
+    username: 'root',
+    password: 'root',
+    database: 'newDB',
+    entities: [AppointmentsEntity],
+    synchronize: true,
    })

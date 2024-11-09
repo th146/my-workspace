@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start:api": "nx run my-workspace:serve:development",
-    "start:ui": "nx run workshop-ui:serve"
-    
+    "start:ui": "nx run workshop-ui:serve",
+    "typeorm:workshop-api:query": "ts-node -P ./apps/workshop-api/tsconfig.app.json ./node_modules/typeorm/cli.js -d apps/workshop-api/ormConfig.ts query"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +52,7 @@
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@types/convict": "^6.1.6",
     "@types/jest": "^29.5.12",
     "@types/node": "~18.16.9",
     "@typescript-eslint/utils": "^8.0.0",
@@ -62,7 +63,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "jest-preset-angular": "~14.1.0",
-    "nx": "20.0.7",
+    "nx": "^20.0.12",
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
