@@ -1,14 +1,10 @@
-version: '3.7'
 services:
   postgres_local_db:
     image: postgres:latest
     container_name: workshop-db
     ports:
       - "5432:5432"
-    networks:
-      - default
     environment:
-      # Password is only used for local development!
-      - "POSTGRES_PASSWORD=root"
-      - "POSTGRES_USER=root"
-      - "POSTGRES_DB=newDB"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: newDB

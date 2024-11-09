@@ -1,3 +1,4 @@
+import { AppointmentDetailViewComponent } from './app/appointment-detail-view/appointment-detail-view.component';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { HttpClientModule } from '@angular/common/http';

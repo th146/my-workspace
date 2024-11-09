@@ -5,7 +5,7 @@
   "scripts": {
     "start:api": "nx run my-workspace:serve:development",
     "start:ui": "nx run workshop-ui:serve",
-    "typeorm:workshop-api:query": "ts-node -P ./apps/workshop-api/tsconfig.app.json ./node_modules/typeorm/cli.js -d apps/workshop-api/ormConfig.ts query"
+    "typeorm:workshop-api:query": "ts-node -P ./apps/my-workspace/tsconfig.app.json ./node_modules/typeorm/cli.js -d apps/my-workspace/ormConfig.ts query"
   },
   "private": true,
   "dependencies": {
@@ -17,11 +17,13 @@
     "@angular/platform-browser": "~18.2.0",
     "@angular/platform-browser-dynamic": "~18.2.0",
     "@angular/router": "~18.2.0",
+    "@babel/runtime": "^7.26.0",
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/typeorm": "^10.0.2",
     "axios": "^1.6.0",
+    "convict": "^6.2.4",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
@@ -38,7 +40,7 @@
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
-    "@nx/angular": "^20.0.11",
+    "@nx/angular": "^20.0.12",
     "@nx/eslint": "20.0.7",
     "@nx/eslint-plugin": "20.0.7",
     "@nx/jest": "20.0.7",
@@ -46,7 +48,7 @@
     "@nx/nest": "20.0.7",
     "@nx/node": "20.0.7",
     "@nx/web": "20.0.11",
-    "@nx/webpack": "20.0.7",
+    "@nx/webpack": "^20.0.7",
     "@nx/workspace": "20.0.7",
     "@schematics/angular": "~18.2.0",
     "@swc-node/register": "~1.9.1",

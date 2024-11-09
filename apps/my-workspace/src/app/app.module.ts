@@ -6,6 +6,7 @@ import { AppointmentsEntity } from "../appointments/appointments.entity";
 import { getConfig } from './config/config';
 
 
+
 const config = getConfig()
 
 @Module({

@@ -21,12 +21,12 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
   },
   dbName: {
     format: String,
-    default: 'NewDB',
+    default: 'newDB', // anpassen auf 'newDB' (kleingeschrieben)
     env: 'DB_NAME',
   },
   dbUser: {
     format: String,
-    default: 'root',
+    default: 'root', // anpassen auf 'root'
     env: 'DB_USER',
   },
   dbPassword: {
@@ -34,7 +34,7 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
     default: 'root',
     env: 'DB_PASSWORD',
     sensitive: true,
-  }
+  },
 }
 
 let instance: Convict.Config<WorkshopApiConfig> | null = null;
