@@ -26,7 +26,7 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
   },
   dbUser: {
     format: String,
-    default: 'root', // anpassen auf 'root'
+    default: 'postgres', // anpassen auf 'root'
     env: 'DB_USER',
   },
   dbPassword: {
