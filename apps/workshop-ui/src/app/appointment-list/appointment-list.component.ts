@@ -16,6 +16,9 @@ import { AppointmentsService } from '../appointments.service';
                  [routerLink]="[appointment.id]">{{appointment.vehicleOwner}} - {{appointment.vehicleRegNo}}</a>
 
           </li>
+            <button routerLink="/appointments/create-appointment" class="btn btn-primary">
+            Create Appointment
+            </button>
       </ul> `,
   styles: [],
 })
