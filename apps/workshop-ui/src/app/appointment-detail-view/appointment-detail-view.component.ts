@@ -50,6 +50,9 @@ import { OpeningHoursValidatorService } from '../appointments/opening-hours-vali
         <button type="submit" [disabled]="form.invalid" class="bg-indigo-400 hover:bg-indigo-300 dark:bg-indigo-700 px-2 py-1 dark:hover:bg-indigo-600 rounded">
           save
         </button>
+        <button type="button" (click)="deleteAppointment()" class="bg-red-400 hover:bg-red-300 dark:bg-red-700 px-2 py-1 dark:hover:bg-red-600 rounded">
+          Delete
+        </button>
       </div>
     </form>
   `,
@@ -58,6 +61,7 @@ import { OpeningHoursValidatorService } from '../appointments/opening-hours-vali
 export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   @Input() appointment!: Appointment;
   @Output() appointmentSave = new EventEmitter<Partial<Appointment>>();
+  @Output() appointmentDelete = new EventEmitter<number>(); // New EventEmitter for Delete action
 
   form!: FormGroup; // Declare the form here
 
@@ -94,6 +98,12 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       console.log('saving value', this.form.value);
     } else {
       console.log('Form is invalid');
+    }
+  }
+
+  deleteAppointment() {
+    if (this.appointment && this.appointment.id) {
+      this.appointmentDelete.emit(this.appointment.id);
     }
   }
 }
