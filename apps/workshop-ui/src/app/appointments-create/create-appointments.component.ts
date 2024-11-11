@@ -40,9 +40,11 @@ import { AppointmentsService } from '../appointments.service'; // Importieren de
         </div>
         <div>
           <label for="status">Status</label>
-          <select id="status" formControlName="status" required>
-            <option value="Repair">Repair</option>
-            <option value="Ready for Pickup">Ready for Pickup</option>
+          <select id="status" formControlName="status">
+            <!-- Status bleibt leer -->
+            <option value="">Select Status</option>
+            <option value="repair">repair</option>
+            <option value="ready for pickup">ready for pickup</option>
           </select>
         </div>
         <button type="submit" [disabled]="form.invalid">Create Appointment</button>
@@ -61,7 +63,10 @@ export class CreateAppointmentsComponent implements OnInit {
 
   form!: FormGroup;
 
-  constructor(private readonly openingHoursValidatorService: OpeningHoursValidatorService, private readonly appointmentsService: AppointmentsService) {}
+  constructor(
+    private readonly openingHoursValidatorService: OpeningHoursValidatorService,
+    private readonly appointmentsService: AppointmentsService
+  ) {}
 
   ngOnInit(): void {
     // Formular initialisieren
@@ -70,8 +75,8 @@ export class CreateAppointmentsComponent implements OnInit {
       date: new FormControl('', { validators: Validators.required, nonNullable: true }),
       time: new FormControl('', { validators: Validators.required, nonNullable: true }),
       vehicleRegNo: new FormControl('', { validators: Validators.required, nonNullable: true }),
-      branch: new FormControl('Dortmund', { validators: Validators.required, nonNullable: true }),
-      status: new FormControl('Repair', { nonNullable: true }),
+      branch: new FormControl('', { validators: Validators.required, nonNullable: true }),
+      status: new FormControl('', { nonNullable: true }), // Status initialisieren als leer
     }, {
       asyncValidators: [this.openingHoursValidatorService.openingHoursValidator('time', 'branch')]
     });
@@ -82,6 +87,7 @@ export class CreateAppointmentsComponent implements OnInit {
       const appointmentToSend: Appointment = {
         ...this.form.value,
         branch: this.form.value.branch ?? 'Dortmund',
+        status: this.form.value.status ?? '', // Sicherstellen, dass Status leer bleibt, wenn nicht angegeben
         assignment: this.form.value.assignment ?? 'No Assignment', // Optional: Default-Wert für `assignment`
       };
 

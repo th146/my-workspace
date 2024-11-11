@@ -42,8 +42,8 @@ import { OpeningHoursValidatorService } from '../appointments/opening-hours-vali
       <div class="flex flex-wrap">
         <label class="w-1/3 block">Status</label>
         <select class="dark:bg-slate-900 w-2/3" formControlName="status">
-          <option value="Reperatur">repair</option>
-          <option value="Abholung">ready for pickup</option>
+          <option value="repair">repair</option>
+          <option value="ready for pickup">ready for pickup</option>
         </select>
       </div>
       <div>
