@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { Appointment } from '@my-workspace/api-interfaces';
-import { AppointmentsService } from '../appointments.service';
-import { firstValueFrom, Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 import { CreateAppointmentsComponent } from './create-appointments.component';
+import { AppointmentsService } from '../appointments.service';
+import { Appointment } from '@my-workspace/api-interfaces';
 
 @Component({
   selector: 'workshop-create-appointment-route',
@@ -16,32 +15,24 @@ import { CreateAppointmentsComponent } from './create-appointments.component';
         Back to list
       </a>
     </div>
-    <workshop-create-appointments
-      (appointmentCreated)="createAppointment($event)">
-    </workshop-create-appointments>
+    <workshop-create-appointments (appointmentCreated)="createAppointment($event)"></workshop-create-appointments>
   `,
   styles: [],
 })
-export class CreateAppointmentRouteComponent implements OnInit {
+export class CreateAppointmentRouteComponent {
   constructor(
-    private appointmentsService: AppointmentsService,
-    private router: Router
+    private readonly appointmentsService: AppointmentsService
   ) {}
 
-  ngOnInit(): void {}
-
-  // Methode zum Erstellen eines Termins
-  handleAppointmentCreated(appointment: Partial<Appointment>) {
-    this.appointmentsService.createAppointment(appointment).subscribe(
-      (response: Appointment) => {
-        console.log('Termin erfolgreich erstellt:', response);
-        // Weiterleitung zur Startseite nach erfolgreicher Erstellung
-        this.router.navigate(['/']);
+  createAppointment(appointment: Partial<Appointment>) {
+    this.appointmentsService.createAppointment(appointment).subscribe({
+      next: (createdAppointment) => {
+        console.log('Termin erstellt:', createdAppointment);
+        // Eventuell Redirect oder Bestätigung anzeigen
       },
-      (error) => {
-        console.error('Fehler beim Erstellen des Termins:', error);
+      error: (err) => {
+        console.error('Fehler beim Erstellen des Termins:', err);
       }
-    );
+    });
   }
-  
 }

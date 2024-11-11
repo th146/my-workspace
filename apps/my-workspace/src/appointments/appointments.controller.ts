@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Patch, Param, ParseIntPipe, HttpException, HttpStatus } from '@nestjs/common';
-import { AppointmentsService } from './appointments.service';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { Appointment } from '@my-workspace/api-interfaces';
+import { AppointmentsService } from './appointments.service';
 
 @Controller('appointments')
 export class AppointmentsController {
-  constructor(private readonly appointmentService: AppointmentsService) {}
+
+  constructor(private readonly appointmentService: AppointmentsService) { }
 
   @Get()
   getAllApointments(): Promise<Appointment[]> {
@@ -12,12 +13,35 @@ export class AppointmentsController {
   }
 
   @Get(':id')
-  async getAppointmentById(@Param('id', ParseIntPipe) id: number): Promise<Appointment> {
-    const candidate = await this.appointmentService.getById(id);
-    if (!candidate) {
-      throw new HttpException('Appointment not found', HttpStatus.NOT_FOUND);
+  async getAppointmentById(@Param('id', ParseIntPipe) id: number) {
+    const canidate = await this.appointmentService.getById(id);
+
+    if (canidate === undefined) {
+      throw new HttpException('', HttpStatus.NOT_FOUND)
     }
-    return candidate;
+
+    return canidate
+  }
+
+  @Patch(':id')
+  async updateAppointment(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() appointment: Partial<Appointment>
+  ): Promise<Appointment> {
+    try {
+      return this.appointmentService.updateAppointment(id, appointment)
+    } catch (e) {
+      throw new HttpException(e?.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Delete(':id')
+  async deleteAppointment(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    try {
+      await this.appointmentService.deleteAppointment(id);
+    } catch (e) {
+      throw new HttpException(e?.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Post('create-appointment')
@@ -28,16 +52,6 @@ export class AppointmentsController {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
+  
 
-  @Patch(':id')
-  async updateAppointment(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() appointment: Partial<Appointment>
-  ): Promise<Appointment> {
-    try {
-      return await this.appointmentService.updateAppointment(id, appointment);
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-    }
-  }
 }
