@@ -20,8 +20,8 @@ export class AppointmentsService {
   }
 
   // Backend-Methode für das Erstellen eines Termins
-  async createAppointment(createAppointmentDto: Appointment): Promise<Appointment> {
-    const newAppointment = this.appointmentsRepo.create(createAppointmentDto);
+  async createAppointment(appointmentData: Appointment): Promise<Appointment> {
+    const newAppointment = this.appointmentsRepo.create(appointmentData);
     return this.appointmentsRepo.save(newAppointment);
   }
 

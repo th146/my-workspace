@@ -1,11 +1,10 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { Appointment } from '@my-workspace/api-interfaces';
+import { Body, Controller, Get, Post, Patch, Param, ParseIntPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
+import { Appointment } from '@my-workspace/api-interfaces';
 
 @Controller('appointments')
 export class AppointmentsController {
-
-  constructor(private readonly appointmentService: AppointmentsService) { }
+  constructor(private readonly appointmentService: AppointmentsService) {}
 
   @Get()
   getAllApointments(): Promise<Appointment[]> {
@@ -13,19 +12,21 @@ export class AppointmentsController {
   }
 
   @Get(':id')
-  async getAppointmentById(@Param('id', ParseIntPipe) id: number) {
-    const canidate = await this.appointmentService.getById(id);
-
-    if (canidate === undefined) {
-      throw new HttpException('', HttpStatus.NOT_FOUND)
+  async getAppointmentById(@Param('id', ParseIntPipe) id: number): Promise<Appointment> {
+    const candidate = await this.appointmentService.getById(id);
+    if (!candidate) {
+      throw new HttpException('Appointment not found', HttpStatus.NOT_FOUND);
     }
-
-    return canidate
+    return candidate;
   }
 
   @Post('create-appointment')
-  createAppointment(@Body() createAppointmentDto: Appointment): Promise<Appointment> {
-    return this.appointmentService.createAppointment(createAppointmentDto);
+  async createAppointment(@Body() appointmentData: Appointment): Promise<Appointment> {
+    try {
+      return await this.appointmentService.createAppointment(appointmentData);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Patch(':id')
@@ -34,11 +35,9 @@ export class AppointmentsController {
     @Body() appointment: Partial<Appointment>
   ): Promise<Appointment> {
     try {
-      return this.appointmentService.updateAppointment(id, appointment)
+      return await this.appointmentService.updateAppointment(id, appointment);
     } catch (e) {
-      throw new HttpException(e?.message, HttpStatus.NOT_FOUND);
+      throw new HttpException(e.message, HttpStatus.NOT_FOUND);
     }
   }
-
-
 }
