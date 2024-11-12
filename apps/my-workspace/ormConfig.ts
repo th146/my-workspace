@@ -1,3 +1,4 @@
+import { UsersEntity } from './src/app/users/users.entity';
 import { DataSource } from 'typeorm';
 import { AppointmentsEntity } from './src/appointments/appointments.entity';
 
@@ -12,5 +13,5 @@ export const AppDataSource = new DataSource({
   database: 'newDB', // entsprechend der Umgebungsvariable POSTGRES_DB
   synchronize: true,  // Ermöglicht die automatische Erstellung der Tabellen, falls erforderlich
   logging: false,
-  entities: [ AppointmentsEntity ],
+  entities: [ AppointmentsEntity, UsersEntity ],
 });

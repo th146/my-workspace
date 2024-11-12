@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConfig } from './config/config';
-import { UsersModule } from './users/users.module'; // Importiere das UsersModule
-import { AppointmentsModule } from '../appointments/appointments.module';
+import { UsersModule } from './users/users.module'; 
 import { AuthModule } from '../auth/auth.module';
+import { AppointmentsModule } from '../appointments/appointments.module';
+import { UsersEntity } from './users/users.entity';
+import { AppointmentsEntity } from '../appointments/appointments.entity';
 
 
 const config = getConfig();
@@ -20,8 +22,8 @@ const config = getConfig();
       autoLoadEntities: true,
       synchronize: true,
     }),
-    UsersModule, 
     AppointmentsModule, 
+    UsersModule, 
     AuthModule, 
   ],
   controllers: [],

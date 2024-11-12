@@ -10,9 +10,10 @@ import { AppointmentDetailRouteComponent } from "./app/appointment-detail-route/
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter([
-      { path: '', pathMatch: 'full', redirectTo: 'appointment' },
+      { path: '', pathMatch: 'full', redirectTo: 'login' },
       { path: 'appointment', component: AppointmentListComponent },
       { path: 'appointment/:id', component: AppointmentDetailRouteComponent },
+      { path: 'appointment/create-appointments', component: AppointmentDetailRouteComponent },
       { path: 'login', component: LoginComponent },
     ]),
     importProvidersFrom(HttpClientModule)

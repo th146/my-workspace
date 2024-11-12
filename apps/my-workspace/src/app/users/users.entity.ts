@@ -5,19 +5,19 @@ export enum Role {
   User = 'user',
 }
 
-@Entity('users')
-export class UserEntity {
+@Entity()
+export class UsersEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  vorname: string; // sicherstellen, dass es hier steht
+  firstName: string; 
 
   @Column()
-  googleId: string; // sicherstellen, dass es hier steht
+  googleId: string; 
 
   @Column()
-  nachname: string;
+  lastName: string;
 
   @Column({
     type: 'enum',
@@ -26,3 +26,4 @@ export class UserEntity {
   })
   role: Role;
 }
+

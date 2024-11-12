@@ -21,8 +21,8 @@ export interface OpeningHoursPerBranch {
 export interface User {
   id?: number;
   googleId?: string,
-  vorname?: string;
-  nachname?: string;
+  firstName?: string;
+  lastName?: string;
   role?: Role;
 
 }

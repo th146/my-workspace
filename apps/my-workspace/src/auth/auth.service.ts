@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@my-workspace/api-interfaces';
 import { JwtService } from '@nestjs/jwt';
-import { UserEntity } from '../app/users/users.entity';
+import { UsersEntity } from '../app/users/users.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(UsersEntity) private readonly userRepo: Repository<UsersEntity>,
     private readonly jwtService: JwtService,
   ) {}
 
