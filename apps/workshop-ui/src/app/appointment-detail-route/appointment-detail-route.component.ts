@@ -11,19 +11,40 @@ import { AppointmentsService } from '../appointments.service';
   standalone: true,
   imports: [CommonModule, RouterLink, AppointmentDetailViewComponent],
   template: `
-      <div class="mb-2">
-          <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" [routerLink]="['..']">
-              Back to list
-          </a>
-      </div>
-      <workshop-appointment-detail-view
-              [appointment]="appointment"
-              (appointmentSave)="save($event)"
-              (appointmentDelete)="deleteAppointment($event)"
-              *ngIf="appointment$ | async as appointment">
-      </workshop-appointment-detail-view>
+    <div class="back-button-container">
+      <button class="back-button" [routerLink]="['..']">
+        ← Back to list
+      </button>
+    </div>
+    
+    <workshop-appointment-detail-view
+      [appointment]="appointment"
+      (appointmentSave)="save($event)"
+      (appointmentDelete)="deleteAppointment($event)"
+      *ngIf="appointment$ | async as appointment">
+    </workshop-appointment-detail-view>
   `,
-  styles: [],
+  styles: [`
+    .back-button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .back-button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      color: #ffffff;
+      background-color: #4f46e5;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .back-button:hover {
+      background-color: #6366f1;
+    }
+  `],
 })
 export class AppointmentDetailRouteComponent {
   appointment$!: Observable<Appointment>;
@@ -32,7 +53,7 @@ export class AppointmentDetailRouteComponent {
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly appointmentsService: AppointmentsService,
-    private readonly router: Router // Inject the Router service
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,8 +71,7 @@ export class AppointmentDetailRouteComponent {
   deleteAppointment(id: number) {
     firstValueFrom(this.appointmentsService.deleteAppointment(id)).then(() => {
       console.log(`Appointment ${id} deleted`);
-      // After deleting, navigate back to the appointment list
-      this.router.navigate(['/appointments']); // Navigate to the list of appointments
+      this.router.navigate(['/appointments']);
     }).catch(error => {
       console.error('Error deleting appointment', error);
     });
