@@ -1,21 +1,20 @@
-import { AppointmentDetailViewComponent } from './app/appointment-detail-view/appointment-detail-view.component';
+import { LoginComponent } from './app/login/login.component';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideRouter } from "@angular/router";
+import { importProvidersFrom } from "@angular/core";
 import { AppointmentListComponent } from "./app/appointment-list/appointment-list.component";
-import { importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
 import { AppointmentDetailRouteComponent } from "./app/appointment-detail-route/appointment-detail-route.component";
-import { CreateAppointmentsComponent } from "./app/appointments-create/create-appointments.component";
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter([
-      { path: '', pathMatch: 'full', redirectTo: 'appointments' },
-      { path: 'appointments', component: AppointmentListComponent },
-      { path: 'appointments/create-appointment', component: CreateAppointmentsComponent },
-      { path: 'appointments/:id', component: AppointmentDetailRouteComponent },
+      { path: '', pathMatch: 'full', redirectTo: 'appointment' },
+      { path: 'appointment', component: AppointmentListComponent },
+      { path: 'appointment/:id', component: AppointmentDetailRouteComponent },
+      { path: 'login', component: LoginComponent },
     ]),
     importProvidersFrom(HttpClientModule)
-  ] 
+  ]
 }).catch((err) => console.error(err));

@@ -17,3 +17,17 @@ export interface OpeningHours {
 export interface OpeningHoursPerBranch {
   [key: string]: OpeningHours;
 }
+
+export interface User {
+  id?: number;
+  googleId?: string,
+  vorname?: string;
+  nachname?: string;
+  role?: Role;
+
+}
+
+export enum Role {
+  Admin = 'admin',
+  User = 'user',
+}

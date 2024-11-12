@@ -1,28 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AppointmentsController } from "../appointments/appointments.controller";
-import { AppointmentsService } from "../appointments/appointments.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { AppointmentsEntity } from "../appointments/appointments.entity";
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConfig } from './config/config';
+import { UsersModule } from './users/users.module'; // Importiere das UsersModule
+import { AppointmentsModule } from '../appointments/appointments.module';
+import { AuthModule } from '../auth/auth.module';
 
 
-
-const config = getConfig()
+const config = getConfig();
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: config.get('dbHost'),
-    port: config.get('dbPort'),
-    username: config.get('dbUser'),
-    password: config.get('dbPassword'),
-    database: config.get('dbName'),
-    autoLoadEntities: true,
-    synchronize: true,
-  }),
-    TypeOrmModule.forFeature([AppointmentsEntity]),
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: config.get('dbHost'),
+      port: config.get('dbPort'),
+      username: config.get('dbUser'),
+      password: config.get('dbPassword'),
+      database: config.get('dbName'),
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    UsersModule, 
+    AppointmentsModule, 
+    AuthModule, 
   ],
-  controllers: [AppointmentsController],
-  providers: [AppointmentsService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
