@@ -80,14 +80,15 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       asyncValidators: [this.openingHoursValidatorService.openingHoursValidator('time', 'branch')],
     });
 
-    // If there is an appointment input, patch the values into the form
+    // Wenn ein Termin übergeben wird, füllen wir das Formular aus
     if (this.appointment) {
       this.form.patchValue(this.appointment);
     }
   }
 
   ngOnChanges(): void {
-    if (this.appointment != null) {
+    // Sicherstellen, dass das Formular existiert, bevor es aktualisiert wird
+    if (this.appointment && this.form) {
       this.form.patchValue(this.appointment);
     }
   }
@@ -104,6 +105,8 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   deleteAppointment() {
     if (this.appointment && this.appointment.id) {
       this.appointmentDelete.emit(this.appointment.id);
+    } else {
+      console.log('Invalid appointment ID');
     }
   }
 }

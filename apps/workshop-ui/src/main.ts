@@ -1,3 +1,4 @@
+import { AuthGuard } from './app/auth/auth.guard';
 import { CreateAppointmentRouteComponent } from './app/appointments-create/create-appointment-route.component';
 import { CreateAppointmentsComponent } from './app/appointments-create/create-appointments.component';
 import { LoginComponent } from './app/login/login.component';
@@ -13,9 +14,9 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideRouter([
       { path: '', pathMatch: 'full', redirectTo: 'auth/login' },
-      { path: 'appointments', component: AppointmentListComponent },
-      { path: 'appointments/:id', component: AppointmentDetailRouteComponent },
-      { path: 'appointments/create-appointment', component: CreateAppointmentRouteComponent },
+      { path: 'appointments', component: AppointmentListComponent, canActivate: [AuthGuard] },
+      { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] },
+      { path: 'appointments/create-appointment', component: CreateAppointmentRouteComponent, canActivate: [AuthGuard] },
       { path: 'auth/login', component: LoginComponent },
     ]),
     importProvidersFrom(HttpClientModule)
