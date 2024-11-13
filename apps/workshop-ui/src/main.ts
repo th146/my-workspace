@@ -7,6 +7,7 @@ import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { AppointmentDetailRouteComponent } from "./app/appointment-detail-route/appointment-detail-route.component";
 import { CreateAppointmentsComponent } from "./app/appointments-create/create-appointments.component";
+import { CreateBranchComponent } from "./app/branches/create-branch.component";
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -15,6 +16,7 @@ bootstrapApplication(AppComponent, {
       { path: 'appointments', component: AppointmentListComponent },
       { path: 'appointments/create-appointment', component: CreateAppointmentsComponent },
       { path: 'appointments/:id', component: AppointmentDetailRouteComponent },
+      { path: 'branches', component: CreateBranchComponent }, 
     ]),
     importProvidersFrom(HttpClientModule)
   ] 

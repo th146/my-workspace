@@ -14,6 +14,12 @@ export interface OpeningHours {
   openingHoursEnd: string;
 }
 
+export interface Branch {
+  name: string;
+  openingHoursStart: string;
+  openingHoursEnd: string;
+}
+
 export interface OpeningHoursPerBranch {
   [key: string]: OpeningHours;
 }

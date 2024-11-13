@@ -2,10 +2,11 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
-import { Appointment } from '@my-workspace/api-interfaces';
+import { Appointment, Branch } from '@my-workspace/api-interfaces';
 import { RouterModule } from '@angular/router';
 import { AppointmentsService } from '../appointments.service';
 import { Location } from '@angular/common';
+import { BranchesService } from '../branches.service';
 
 @Component({
   selector: 'workshop-create-appointments',
@@ -21,12 +22,16 @@ import { Location } from '@angular/common';
           <div class="form-group">
             <label for="vehicleOwner">Owner</label>
             <input type="text" id="vehicleOwner" formControlName="vehicleOwner" class="input-field">
-            <div class="error" *ngIf="form.controls['vehicleOwner'].invalid">Please provide an owner</div>
+            <div class="error" *ngIf="isFieldInvalid('vehicleOwner')">
+              Please provide an owner
+            </div>
           </div>
           <div class="form-group">
             <label for="vehicleRegNo">Vehicle Registration</label>
             <input type="text" id="vehicleRegNo" formControlName="vehicleRegNo" class="input-field">
-            <div class="error" *ngIf="form.controls['vehicleRegNo'].invalid">Please provide a registration number</div>
+            <div class="error" *ngIf="isFieldInvalid('vehicleRegNo')">
+              Please provide a registration number
+            </div>
           </div>
         </div>
 
@@ -35,21 +40,28 @@ import { Location } from '@angular/common';
           <div class="form-group">
             <label for="date">Date</label>
             <input type="date" id="date" formControlName="date" class="input-field">
-            <div class="error" *ngIf="form.controls['date'].invalid">Please provide a valid date</div>
+            <div class="error" *ngIf="isFieldInvalid('date')">
+              Please provide a valid date
+            </div>
           </div>
           <div class="form-group">
             <label for="time">Time</label>
             <input type="time" id="time" formControlName="time" class="input-field">
-            <div class="error" *ngIf="form.controls['time'].invalid">Please provide a valid time</div>
+            <div class="error" *ngIf="isFieldInvalid('time')">
+              Please provide a valid time
+            </div>
           </div>
           <div class="form-group">
             <label for="branch">Branch</label>
             <select id="branch" formControlName="branch" class="input-field">
-              <option value="Dortmund">Dortmund</option>
-              <option value="Berlin">Berlin</option>
+              <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
             </select>
-            <div class="error" *ngIf="form.controls['branch'].invalid">Please select a branch</div>
-            <div class="error" *ngIf="form.hasError('openingHours')">{{ form.getError('openingHours') }}</div>
+            <div class="error" *ngIf="isFieldInvalid('branch')">
+              Please select a branch
+            </div>
+            <div class="error" *ngIf="form.hasError('openingHours')">
+              {{ form.getError('openingHours') }}
+            </div>
           </div>
         </div>
 
@@ -67,7 +79,7 @@ import { Location } from '@angular/common';
 
         <div class="form-buttons">
           <button type="submit" [disabled]="form.invalid" class="btn-save">Create Appointment</button>
-          <a class="btn-back" (click)="goBack()">Back to list</a>
+          <button type="button" class="btn-back" (click)="goBack()">Back to list</button>
         </div>
       </form>
     </div>
@@ -89,16 +101,10 @@ import { Location } from '@angular/common';
       border-radius: 6px;
       background-color: #ffffff;
     }
-    h2, h3 {
-      color: #1f2937;
-    }
-    h2 {
-      font-size: 1.5rem;
-      text-align: center;
-    }
     h3 {
       margin-bottom: 0.5rem;
       font-size: 1.2rem;
+      color: #1f2937;
     }
     .form-group {
       display: flex;
@@ -134,25 +140,27 @@ import { Location } from '@angular/common';
     }
     .btn-save {
       padding: 0.6rem 1.2rem;
-      background-color: #4f46e5;
-      color: #ffffff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 1rem;
+      color: #ffffff;
+      background-color: #4f46e5;
     }
     .btn-save:hover {
       background-color: #6366f1;
     }
     .btn-back {
       padding: 0.6rem 1.2rem;
-      background-color: #6b7280;
-      color: #ffffff;
-      text-align: center;
+      border: none;
       border-radius: 4px;
-      text-decoration: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #ffffff;
+      background-color: #f87171;
     }
     .btn-back:hover {
-      background-color: #9ca3af;
+      background-color: #fb7185;
     }
     @media (max-width: 600px) {
       .form-container {
@@ -161,8 +169,8 @@ import { Location } from '@angular/common';
       .input-field {
         font-size: 0.9rem;
       }
-      h2, h3 {
-        font-size: 1.1rem;
+      h3 {
+        font-size: 1rem;
       }
     }
   `],
@@ -171,11 +179,14 @@ export class CreateAppointmentsComponent implements OnInit {
   @Output() appointmentCreated = new EventEmitter<Partial<Appointment>>();
 
   form!: FormGroup;
+  branches: Branch[] = [];
+  formSubmitted = false; // Flag für das Anzeigen der Fehler bei der Formularüberprüfung
 
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly appointmentsService: AppointmentsService,
-    private readonly location: Location // Injection des Location Services
+    private readonly branchesService: BranchesService, 
+    private readonly location: Location 
   ) {}
 
   ngOnInit(): void {
@@ -189,9 +200,20 @@ export class CreateAppointmentsComponent implements OnInit {
     }, {
       asyncValidators: [this.openingHoursValidatorService.openingHoursValidator('time', 'branch')]
     });
+  
+    this.branchesService.getBranches().subscribe({
+      next: (branches) => {
+        this.branches = branches;
+        this.form.updateValueAndValidity();
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Branches:', err);
+      }
+    });
   }
-
+  
   createAppointmentSubmit() {
+    this.formSubmitted = true; // Markiere das Formular als abgesendet
     if (this.form.valid) {
       const appointmentToSend: Appointment = {
         ...this.form.value,
@@ -199,24 +221,30 @@ export class CreateAppointmentsComponent implements OnInit {
         status: this.form.value.status ?? '',
         assignment: this.form.value.assignment ?? 'No Assignment',
       };
-
+  
       this.appointmentsService.createAppointment(appointmentToSend).subscribe({
         next: (createdAppointment) => {
           console.log('Appointment created:', createdAppointment);
           this.appointmentCreated.emit(createdAppointment);
           this.form.reset();
-          this.location.back(); // Zurück zur vorherigen Seite
+          this.formSubmitted = false; // Setze das Flag zurück
+          this.location.back();
         },
-        error: (err) => {
-          console.error('Error creating appointment:', err);
+        error: (error) => {
+          console.error('Error creating appointment:', error);
         }
       });
     } else {
-      console.log('Form is invalid');
+      console.error('Form is not valid');
     }
+  }  
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.form.get(fieldName);
+    return !!field && field.invalid && (field.touched || this.formSubmitted);
   }
 
   goBack() {
-    this.location.back(); // Zurück zur vorherigen Seite, wenn der "Back" Button geklickt wird
+    this.location.back();
   }
 }

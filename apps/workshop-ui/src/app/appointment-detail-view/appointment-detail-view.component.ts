@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Appointment } from '@my-workspace/api-interfaces';
+import { Appointment, Branch } from '@my-workspace/api-interfaces'; // Importiere das Branch Interface
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
-import { Location } from '@angular/common'; // Importiere das Location-Service
+import { Location } from '@angular/common';
+import { BranchesService } from '../branches.service';
+
 
 @Component({
   selector: 'workshop-appointment-detail-view',
@@ -40,8 +42,7 @@ import { Location } from '@angular/common'; // Importiere das Location-Service
         <div class="form-group">
           <label>Branch</label>
           <select formControlName="branch" class="input-field">
-            <option value="Dortmund">Dortmund</option>
-            <option value="Berlin">Berlin</option>
+            <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
           </select>
           <div class="error" *ngIf="form.controls['branch'].invalid">Please select a branch</div>
           <div class="error" *ngIf="form.hasError('openingHours')">{{ form.getError('openingHours') }}</div>
@@ -117,7 +118,7 @@ import { Location } from '@angular/common'; // Importiere das Location-Service
       display: flex;
       gap: 1rem;
       margin-top: 1rem;
-      justify-content: center; /* Zentriert die Buttons horizontal */
+      justify-content: center;
     }
     .btn-save, .btn-delete {
       padding: 0.6rem 1.2rem;
@@ -158,13 +159,16 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   @Output() appointmentDelete = new EventEmitter<number>();
 
   form!: FormGroup;
+  branches: Branch[] = [];  // Array für die Standorte
 
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
-    private readonly location: Location // Injectiere das Location-Service
+    private readonly location: Location,
+    private readonly branchesService: BranchesService  // Injektion des BranchesService
   ) {}
 
   ngOnInit(): void {
+    // Formularinitialisierung
     this.form = new FormGroup({
       vehicleOwner: new FormControl('', { validators: Validators.required, nonNullable: true }),
       date: new FormControl('', { validators: Validators.required, nonNullable: true }),
@@ -179,6 +183,11 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
     if (this.appointment) {
       this.form.patchValue(this.appointment);
     }
+
+    // Lade die Standorte
+    this.branchesService.getBranches().subscribe((branches: Branch[]) => {
+      this.branches = branches;  // Setze die Standorte im lokalen Array
+    });
   }
 
   ngOnChanges(): void {

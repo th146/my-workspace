@@ -1,23 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { Appointment, OpeningHoursPerBranch } from '@my-workspace/api-interfaces';
+import { Observable } from 'rxjs';
+import { Appointment, OpeningHoursPerBranch, Branch } from '@my-workspace/api-interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentsService {
-  openingHoursPerBranch: OpeningHoursPerBranch = {
-    Berlin: {
-      openingHoursStart: '08:00',
-      openingHoursEnd: '16:00',
-    },
-    Dortmund: {
-      openingHoursStart: '07:00',
-      openingHoursEnd: '20:00',
-    },
-  };
-
   constructor(private readonly httpClient: HttpClient) {}
 
   getAll(): Observable<Appointment[]> {
@@ -32,17 +21,17 @@ export class AppointmentsService {
     return this.httpClient.patch<Appointment>(`my-workspace/appointments/${id}`, appointment);
   }
 
-  // Neue Delete-Methode
   deleteAppointment(id: number): Observable<void> {
     return this.httpClient.delete<void>(`my-workspace/appointments/${id}`);
   }
 
-  getOpeningHoursPerBranch(): Observable<OpeningHoursPerBranch> {
-    return of(this.openingHoursPerBranch);
+  // Hole die Branches und deren Öffnungszeiten
+  getBranches(): Observable<Branch[]> {
+    return this.httpClient.get<Branch[]>('my-workspace/branches');
   }
 
   createAppointment(appointmentData: Appointment): Observable<Appointment> {
     return this.httpClient.post<Appointment>('my-workspace/appointments/create-appointment', appointmentData);
   }
-  
 }
+

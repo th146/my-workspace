@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Appointment } from '@my-workspace/api-interfaces';
 import { isTimeInInterval } from '@my-workspace/shared'
-import { openingHoursPerBranch } from "../branches/branches.controller";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AppointmentsEntity } from "./appointments.entity";
 import { Repository } from "typeorm";
+import { BranchesService } from '../branches/branches.service';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(@InjectRepository(AppointmentsEntity) private readonly appointmentsRepo: Repository<Appointment>) {
+  constructor(@InjectRepository(AppointmentsEntity) private readonly appointmentsRepo: Repository<Appointment>, private readonly branchesService: BranchesService) {
   }
 
   async getAll(): Promise<Appointment[]> {
@@ -21,20 +21,20 @@ export class AppointmentsService {
 
   async updateAppointment(id: number, appointment: Partial<Appointment>): Promise<Appointment> {
     const candidate = await this.getById(id);
-
-    if (candidate === null) {
-      throw new Error(`no appointment with id ${id} found.`);
+  
+    if (!candidate) throw new Error(`No appointment with id ${id} found.`);
+  
+    const branch = await this.branchesService.getBranchByName(appointment.branch);
+    if (!branch) throw new Error(`Branch ${appointment.branch} not found.`);
+  
+    const start = branch.openingHoursStart;
+    const end = branch.openingHoursEnd;
+  
+    if (!isTimeInInterval(appointment.time, start, end)) {
+      throw new Error(`Time ${appointment.time} is not within opening hours (${start} - ${end}).`);
     }
-
-    const patchedAppointment: Appointment = {...candidate, ...appointment};
-    const start = openingHoursPerBranch[patchedAppointment.branch].openingHoursStart;
-    const end = openingHoursPerBranch[patchedAppointment.branch].openingHoursEnd;
-
-    if (false === isTimeInInterval(patchedAppointment.time, start, end)) {
-      throw new Error(`The time ${patchedAppointment.time} of the appointment is not within the opening hours (${start} - ${end})`);
-    }
-    await this.appointmentsRepo.save(patchedAppointment)
-    return patchedAppointment;
+  
+    return this.appointmentsRepo.save({ ...candidate, ...appointment });
   }
 
   // Backend-Methode für das Löschen eines Termins
