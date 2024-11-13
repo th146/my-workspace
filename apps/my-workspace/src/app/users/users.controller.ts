@@ -6,7 +6,7 @@ import { User } from '@my-workspace/api-interfaces';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('create-user')
   async createUser(@Body() userData: User): Promise<User> {
     return this.usersService.createUser(userData);
   }
