@@ -10,13 +10,7 @@ import { AppointmentsService } from '../appointments.service';
   selector: 'workshop-appointment-detail-route',
   standalone: true,
   imports: [CommonModule, RouterLink, AppointmentDetailViewComponent],
-  template: `
-    <div class="back-button-container">
-      <button class="back-button" [routerLink]="['..']">
-        ← Back to list
-      </button>
-    </div>
-    
+  template: `    
     <workshop-appointment-detail-view
       [appointment]="appointment"
       (appointmentSave)="save($event)"

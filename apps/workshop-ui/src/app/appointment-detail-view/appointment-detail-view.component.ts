@@ -12,6 +12,7 @@ import { BranchesService } from '../branches.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
+    <h2>Appointment Details</h2> <!-- Überschrift hinzugefügt -->
     <form [formGroup]="form" (ngSubmit)="save()" class="form-container">
       <div class="form-section">
         <h3>Fahrzeuginformation</h3>
@@ -60,9 +61,11 @@ import { BranchesService } from '../branches.service';
         </div>
       </div>
 
+      <!-- Buttons -->
       <div class="form-buttons">
         <button type="submit" [disabled]="form.invalid" class="btn-save">Save</button>
         <button type="button" (click)="deleteAppointment()" class="btn-delete">Delete</button>
+        <a class="btn-back" (click)="goBack()">Back to list</a>
       </div>
     </form>
   `,
@@ -73,53 +76,67 @@ import { BranchesService } from '../branches.service';
       gap: 1rem;
       max-width: 600px;
       margin: auto;
-      padding: 2rem;
+      padding: 1rem; /* Padding reduziert für kompakteres Layout */
       border-radius: 8px;
       background-color: #f7f9fc;
     }
+
     .form-section {
-      padding: 1rem;
+      padding: 0.75rem; /* Weniger Padding für eine kompaktere Darstellung */
       border: 1px solid #e2e8f0;
       border-radius: 6px;
       background-color: #ffffff;
     }
+
     h3 {
       margin-bottom: 0.5rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem; /* Kleinere Schriftgröße */
       color: #1f2937;
     }
+
+    h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
       margin-bottom: 1rem;
     }
+
     label {
       font-weight: bold;
       margin-bottom: 0.3rem;
       color: #4b5563;
     }
+
     .input-field {
       padding: 0.5rem;
       border: 1px solid #cbd5e0;
       border-radius: 4px;
-      font-size: 1rem;
+      font-size: 0.95rem; /* Kleinere Schriftgröße */
     }
+
     .input-field:focus {
       outline: none;
       border-color: #6366f1;
       box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
     }
+
     .error {
       color: #f87171;
       font-size: 0.85rem;
       margin-top: 0.3rem;
     }
+
     .form-buttons {
       display: flex;
       gap: 1rem;
       margin-top: 1rem;
       justify-content: center;
     }
+
     .btn-save, .btn-delete {
       padding: 0.6rem 1.2rem;
       border: none;
@@ -128,18 +145,36 @@ import { BranchesService } from '../branches.service';
       font-size: 1rem;
       color: #ffffff;
     }
+
     .btn-save {
       background-color: #4f46e5;
     }
+
     .btn-save:hover {
       background-color: #6366f1;
     }
+
     .btn-delete {
       background-color: #f87171;
     }
+
     .btn-delete:hover {
       background-color: #fb7185;
     }
+
+    .btn-back {
+      padding: 0.6rem 1.2rem;
+      background-color: #6b7280;
+      color: #ffffff;
+      text-align: center;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn-back:hover {
+      background-color: #9ca3af;
+    }
+
     @media (max-width: 600px) {
       .form-container {
         padding: 1rem;
@@ -214,5 +249,9 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       // Nach dem Löschen zur vorherigen Seite zurückkehren
       this.location.back();
     }
+  }
+
+  goBack() {
+    this.location.back(); // Zurück zur vorherigen Seite
   }
 }

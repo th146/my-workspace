@@ -22,11 +22,6 @@ import { BranchesService } from '../branches.service';
             <input type="text" id="name" formControlName="name" class="input-field">
             <div class="error" *ngIf="form.controls['name'].invalid">Please provide a branch name</div>
           </div>
-          <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" formControlName="location" class="input-field">
-            <div class="error" *ngIf="form.controls['location'].invalid">Please provide a location</div>
-          </div>
         </div>
 
         <div class="form-section">
@@ -158,7 +153,6 @@ export class CreateBranchComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       name: new FormControl('', { validators: Validators.required, nonNullable: true }),
-      location: new FormControl('', { validators: Validators.required, nonNullable: true }),
       openingHoursStart: new FormControl('', { validators: Validators.required, nonNullable: true }),
       openingHoursEnd: new FormControl('', { validators: Validators.required, nonNullable: true }),
     });

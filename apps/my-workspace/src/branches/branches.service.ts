@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BranchEntity } from './branches.entity';
+import { Branch } from '@my-workspace/api-interfaces';
 
 
 @Injectable()
@@ -29,4 +30,9 @@ export class BranchesService {
   async deleteBranch(id: number): Promise<void> {
     await this.branchRepo.delete(id);
   }
+
+  async getById(id: number): Promise<Branch | null> {
+    return this.branchRepo.findOne({ where: { id } });
+  }
+  
 }

@@ -18,4 +18,19 @@ export class BranchesService {
   getBranches(): Observable<Branch[]> {
     return this.httpClient.get<Branch[]>('my-workspace/branches');
   }
+
+  // Methode zum Abrufen eines einzelnen Standorts
+  getById(id: number): Observable<Branch> {
+    return this.httpClient.get<Branch>(`my-workspace/branches/${id}`);
+  }
+
+  // Methode zum Aktualisieren eines Standorts
+  updateBranch(id: number, branch: Partial<Branch>): Observable<Branch> {
+    return this.httpClient.patch<Branch>(`my-workspace/branches/${id}`, branch);
+  }
+
+  // Methode zum Löschen eines Standorts
+  deleteBranch(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`my-workspace/branches/${id}`);
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { BranchesService } from './branches.service';
 import { BranchEntity } from './branches.entity';
 
@@ -26,4 +26,15 @@ export class BranchesController {
   deleteBranch(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.branchesService.deleteBranch(id);
   }
+
+  @Get(':id')
+  async getBranchById(@Param('id', ParseIntPipe) id: number) {
+    const canidate = await this.branchesService.getById(id);
+
+    if (canidate === undefined) {
+      throw new HttpException('', HttpStatus.NOT_FOUND)
+    }
+    return canidate
+}
+
 }
