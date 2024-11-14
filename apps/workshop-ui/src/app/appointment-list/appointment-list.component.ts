@@ -38,10 +38,10 @@ import { BranchesService } from '../branches.service';
 
       <div class="form-buttons">
         <button (click)="navigateToCreateAppointment()" class="btn-save">
-          + Create New Appointment
+          Create New Appointment
         </button>
-        <button (click)="navigateToCreateBranch()" class="btn-save">
-          + Create New Branch
+        <button (click)="navigateToBranches()" class="btn-save">
+          Branches List
         </button>
       </div>
     </div>
@@ -188,7 +188,7 @@ export class AppointmentListComponent implements OnInit {
   
   
 
-  navigateToCreateBranch(): void {
+  navigateToBranches(): void {
     this.router.navigate(['/branches']);
   }
 }

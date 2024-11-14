@@ -9,6 +9,7 @@ import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 import { AuthGuard } from './app/auth/auth.guard';
 import { CreateBranchComponent } from "./app/branches/create-branch.component";
+import { BranchesViewComponent } from "./app/branches/branches-view-component";
 
 
 bootstrapApplication(AppComponent, {
@@ -17,10 +18,10 @@ bootstrapApplication(AppComponent, {
       { path: '', pathMatch: 'full', redirectTo: 'users/login' },
       { path: 'appointments', component: AppointmentListComponent, canActivate: [AuthGuard] },
       { path: 'users/login', component: LoginComponent },
-      { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] },  // Detailansicht
+      { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] }, // Detailansicht
       { path: 'create-appointment', component: CreateAppointmentsComponent, canActivate: [AuthGuard] },
-      { path: 'users/login', component: LoginComponent },
-      { path: 'branches', component: CreateBranchComponent, canActivate: [AuthGuard] }
+      { path: 'branches', component: BranchesViewComponent, canActivate: [AuthGuard] }, // Hauptansicht für Branches
+      { path: 'create-branch', component: CreateBranchComponent, canActivate: [AuthGuard] } // Erstellen eines neuen Standorts
     ]),
     importProvidersFrom(HttpClientModule)
   ]

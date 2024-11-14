@@ -33,6 +33,7 @@ export enum Role {
 }
 
 export interface Branch {
+  id: Branch;
   name: string;
   openingHoursStart: string;
   openingHoursEnd: string;
