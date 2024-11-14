@@ -76,7 +76,7 @@ export class CreateAppointmentsComponent implements OnInit {
       time: new FormControl('', { validators: Validators.required, nonNullable: true }),
       vehicleRegNo: new FormControl('', { validators: Validators.required, nonNullable: true }),
       branch: new FormControl('', { validators: Validators.required, nonNullable: true }),
-      status: new FormControl('', { nonNullable: true }), // Status initialisieren als leer
+      status: new FormControl('', { nonNullable: true }), 
     }, {
       asyncValidators: [this.openingHoursValidatorService.openingHoursValidator('time', 'branch')]
     });

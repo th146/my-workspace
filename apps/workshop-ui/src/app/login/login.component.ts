@@ -1,92 +1,107 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
-import { HttpClient } from '@angular/common/http';  // Für HTTP-Anfragen
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router'; // Router importieren
+import { LoginService } from './login.service'; // LoginService importieren
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule], 
   template: `
-    <div class="login-container">
-      <h2>Login</h2>
-      <!-- Google Sign-In Button -->
-      <div id="google-signin-button"></div>
-    </div>
+    <form [formGroup]="form" (ngSubmit)="loginUserSubmit()">
+      <table class="w-full">
+        <tr>
+          <td class="w-1/3">Name</td>
+          <td>
+            <input type="text" formControlName="name" class="dark:bg-slate-900 w-full" />
+            <div *ngIf="form.controls['name'].invalid && (form.controls['name'].touched || form.controls['name'].dirty)">
+              Please provide your name
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="w-1/3">Password</td>
+          <td>
+            <input type="password" formControlName="password" class="dark:bg-slate-900 w-full" />
+            <div *ngIf="form.controls['password'].invalid && (form.controls['password'].touched || form.controls['password'].dirty)">
+              Please provide your password
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-center">
+            <button 
+              type="submit" 
+              [disabled]="form.invalid" 
+              class="bg-indigo-400 hover:bg-indigo-300 dark:bg-indigo-700 px-2 py-1 dark:hover:bg-indigo-600 rounded">
+              Login
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
   `,
-  styles: [`
-    .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-  `]
+  styles: [],
 })
 export class LoginComponent implements OnInit {
-
+  form!: FormGroup; // Formular-Objekt
+  token: string | null = null;
+  
   constructor(
-    private authService: AuthService,
-    private router: Router,
-    private http: HttpClient  // Für HTTP-Anfragen zum Backend
+    private loginService: LoginService,  // LoginService injizieren
+    private router: Router               // Router injizieren
   ) {}
 
   ngOnInit(): void {
-    this.loadGoogleScript().then(() => {
-      this.initializeGoogleAuth();
+    // Formular mit Validierung initialisieren
+    this.form = new FormGroup({
+      name: new FormControl('', [Validators.required]),  // Name-Feld validieren
+      password: new FormControl('', [Validators.required]),  // Passwort-Feld validieren
     });
   }
 
-  // Methode zum Laden des Google-Skripts und Warten auf das Laden
-  loadGoogleScript(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve();
-      script.onerror = (error) => reject(error);
-      document.body.appendChild(script);
-    });
-  }
-
-  // Methode zur Initialisierung des Google-Logins nach dem Laden des Skripts
-  initializeGoogleAuth(): void {
-    const clientId = document.querySelector('meta[name="google-signin-client_id"]')?.getAttribute('content');
-    if (clientId) {
-      // Google Identity Services (GIS) Setup
-      google.accounts.id.initialize({
-        client_id: clientId!,
-        callback: this.onGoogleLogin.bind(this)
+  loginUserSubmit() {
+    if (this.form.valid) {
+      const loginData = {
+        name: this.form.value.name,
+        password: this.form.value.password,
+      };
+  
+      // Login-Anfrage an den Service senden
+      this.loginService.login(loginData.name, loginData.password).subscribe({
+        next: (response) => {
+          console.log('Login erfolgreich:', response);
+  
+          // Überprüfen, ob das access_token im Response-Body enthalten ist
+          if (response) {
+            // Token speichern (z.B. in localStorage)
+            this.loginService.saveToken(response);
+            this.token = response;  // Token in der Komponente speichern
+  
+            // Sicherstellen, dass der Token gespeichert wurde
+            console.log('Token gespeichert:', localStorage.getItem('access_token'));  // Debugging-Ausgabe
+  
+            // Weiterleitung zur appointments-Seite
+            this.router.navigate(['/appointments']);
+          } else {
+            console.error('Token nicht im Response gefunden!');
+          }
+        },
+        error: (err) => {
+          console.error('Login fehlgeschlagen:', err);
+        },
       });
-
-      // Render the Google Sign-In button
-      google.accounts.id.renderButton(
-        document.getElementById('google-signin-button')!, 
-        { theme: 'outline', size: 'large' }
-      );
     } else {
-      console.error('Google Client ID not found');
+      console.log('Formular ist ungültig');
     }
   }
-
-  // Callback nach erfolgreichem Google-Login
-  onGoogleLogin(response: any): void {
-    const token = response.credential; // Das Token aus der Antwort holen
-    this.authService.saveToken(token);  // Das Token im AuthService speichern
-    
-    // Anfrage an das Backend senden, um den User zu authentifizieren
-    this.http.post('http://localhost:3000/auth/google', { token }).subscribe(
-      (data: any) => {
-        this.authService.saveToken(data.access_token);  // JWT vom Backend speichern
-        this.router.navigate(['/appointments']);  // Weiterleitung zur appointments-Seite
-      },
-      (error) => {
-        console.error('Error during Google login', error);
-      }
-    );
-  }
+  
+  
+  
+  
+  
+  
+  
 }

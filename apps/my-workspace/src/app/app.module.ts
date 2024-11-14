@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConfig } from './config/config';
 import { UsersModule } from './users/users.module'; 
-import { AuthModule } from '../auth/auth.module';
 import { AppointmentsModule } from '../appointments/appointments.module';
-import { UsersEntity } from './users/users.entity';
-import { AppointmentsEntity } from '../appointments/appointments.entity';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from '../auth/auth.module';
+
+
+
 
 
 const config = getConfig();
@@ -23,10 +26,10 @@ const config = getConfig();
       synchronize: true,
     }),
     AppointmentsModule, 
-    UsersModule, 
-    AuthModule, 
+    UsersModule,
+    AuthModule  
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -8,22 +8,19 @@ export enum Role {
 @Entity()
 export class UsersEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
-  firstName: string; 
+  name?: string;
 
   @Column()
-  googleId: string; 
-
-  @Column()
-  lastName: string;
+  password?: string;
 
   @Column({
     type: 'enum',
     enum: Role,
     default: Role.User,
   })
-  role: Role;
+  role?: Role;
 }
 

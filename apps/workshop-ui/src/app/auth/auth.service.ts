@@ -1,27 +1,33 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private readonly TOKEN_KEY = 'auth_token';
-
   constructor() { }
 
   saveToken(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
+    console.log('Saving token:', token);  // Ausgabe des Tokens
+    localStorage.setItem('access_token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage.getItem('access_token');
+    console.log('Retrieved token:', token);  // Ausgabe des abgerufenen Tokens
+    return token;
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    const token = localStorage.getItem('access_token');
+    console.log('Token gefunden:', token);  // Überprüfung in der Konsole
+    return !!token;
   }
+  
 
-  removeToken(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+  clearToken(): void {
+    console.log('Clearing token');
+    localStorage.removeItem('access_token');
   }
 }

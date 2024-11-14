@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { Appointment } from '@my-workspace/api-interfaces';
 import { AppointmentsService } from './appointments.service';
+import { Roles } from '../auth/roles/roles.decorator';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -35,6 +36,7 @@ export class AppointmentsController {
     }
   }
 
+  @Roles('admin')
   @Delete(':id')
   async deleteAppointment(@Param('id', ParseIntPipe) id: number): Promise<void> {
     try {
