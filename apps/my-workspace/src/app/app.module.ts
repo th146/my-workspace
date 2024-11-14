@@ -6,6 +6,7 @@ import { AppointmentsModule } from '../appointments/appointments.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
+import { BranchesModule } from '../branches/branches.module';
 
 
 
@@ -27,7 +28,8 @@ const config = getConfig();
     }),
     AppointmentsModule, 
     UsersModule,
-    AuthModule  
+    AuthModule,
+    BranchesModule  
   ],
   controllers: [AppController],
   providers: [AppService],

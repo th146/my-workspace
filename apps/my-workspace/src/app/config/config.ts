@@ -21,7 +21,7 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
   },
   dbName: {
     format: String,
-    default: 'newDB', // anpassen auf 'newDB' (kleingeschrieben)
+    default: 'newdb', // anpassen auf 'newDB' (kleingeschrieben)
     env: 'DB_NAME',
   },
   dbUser: {

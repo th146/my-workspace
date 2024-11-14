@@ -1,5 +1,4 @@
 import { AppointmentDetailRouteComponent } from './app/appointment-detail-route/appointment-detail-route.component';
-import { CreateAppointmentRouteComponent } from './app/appointments-create/create-appointment-route.component';
 import { CreateAppointmentsComponent } from './app/appointments-create/create-appointments.component';
 import { HttpClientModule } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -9,6 +8,8 @@ import { AppointmentListComponent } from './app/appointment-list/appointment-lis
 import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 import { AuthGuard } from './app/auth/auth.guard';
+import { CreateBranchComponent } from "./app/branches/create-branch.component";
+
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -17,8 +18,9 @@ bootstrapApplication(AppComponent, {
       { path: 'appointments', component: AppointmentListComponent, canActivate: [AuthGuard] },
       { path: 'users/login', component: LoginComponent },
       { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] },  // Detailansicht
-      { path: 'appointments/create', component: CreateAppointmentRouteComponent, canActivate: [AuthGuard] },  // Neuer Termin
+      { path: 'create-appointment', component: CreateAppointmentsComponent, canActivate: [AuthGuard] },
       { path: 'users/login', component: LoginComponent },
+      { path: 'branches', component: CreateBranchComponent, canActivate: [AuthGuard] }
     ]),
     importProvidersFrom(HttpClientModule)
   ]

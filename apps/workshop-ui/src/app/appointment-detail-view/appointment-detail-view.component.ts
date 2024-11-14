@@ -1,74 +1,174 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Appointment } from '@my-workspace/api-interfaces';
+import { Appointment, Branch } from '@my-workspace/api-interfaces'; // Importiere das Branch Interface
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
+import { Location } from '@angular/common';
+import { BranchesService } from '../branches.service';
+
 
 @Component({
   selector: 'workshop-appointment-detail-view',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <form [formGroup]="form" (ngSubmit)="save()" class="grid gap-2 w-full">
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Owner</label>
-        <input class="dark:bg-slate-900 w-2/3" type="text" formControlName="vehicleOwner">
-        <div class="w-full error" *ngIf="form.controls['vehicleOwner'].invalid">Please provide an owner</div>
+    <form [formGroup]="form" (ngSubmit)="save()" class="form-container">
+      <div class="form-section">
+        <h3>Fahrzeuginformation</h3>
+        <div class="form-group">
+          <label>Owner</label>
+          <input type="text" formControlName="vehicleOwner" class="input-field">
+          <div class="error" *ngIf="form.controls['vehicleOwner'].invalid">Please provide an owner</div>
+        </div>
+        <div class="form-group">
+          <label>Registration</label>
+          <input type="text" formControlName="vehicleRegNo" class="input-field">
+          <div class="error" *ngIf="form.controls['vehicleRegNo'].invalid">Please provide a registration number</div>
+        </div>
       </div>
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Date</label>
-        <input class="dark:bg-slate-900 w-2/3" type="date" formControlName="date">
-        <div class="w-full error" *ngIf="form.controls['date'].invalid">Please provide a valid date</div>
+
+      <div class="form-section">
+        <h3>Terminzeit und Ort</h3>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" formControlName="date" class="input-field">
+          <div class="error" *ngIf="form.controls['date'].invalid">Please provide a valid date</div>
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <input type="time" formControlName="time" class="input-field">
+          <div class="error" *ngIf="form.controls['time'].invalid">Please provide a valid time</div>
+        </div>
+        <div class="form-group">
+          <label>Branch</label>
+          <select formControlName="branch" class="input-field">
+            <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
+          </select>
+          <div class="error" *ngIf="form.controls['branch'].invalid">Please select a branch</div>
+          <div class="error" *ngIf="form.hasError('openingHours')">{{ form.getError('openingHours') }}</div>
+        </div>
       </div>
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Time</label>
-        <input class="dark:bg-slate-900 w-2/3" type="time" formControlName="time">
-        <div class="w-full error" *ngIf="form.controls['time'].invalid">Please provide a valid time</div>
+
+      <div class="form-section">
+        <h3>Status</h3>
+        <div class="form-group">
+          <label>Status</label>
+          <select formControlName="status" class="input-field">
+            <option value="repair">Repair</option>
+            <option value="ready for pickup">Ready for pickup</option>
+          </select>
+        </div>
       </div>
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Registration</label>
-        <input class="dark:bg-slate-900 w-2/3" type="text" formControlName="vehicleRegNo">
-        <div class="w-full error" *ngIf="form.controls['vehicleRegNo'].invalid">Please provide a registration number</div>
-      </div>
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Branch</label>
-        <select class="dark:bg-slate-900 w-2/3" formControlName="branch">
-          <option value="Dortmund">Dortmund</option>
-          <option value="Berlin">Berlin</option>
-        </select>
-        <div class="w-full error" *ngIf="form.controls['branch'].invalid">Please select a branch</div>
-        <div class="w-full error" *ngIf="form.hasError('openingHours')">{{ form.getError('openingHours') }}</div>
-      </div>
-      <div class="flex flex-wrap">
-        <label class="w-1/3 block">Status</label>
-        <select class="dark:bg-slate-900 w-2/3" formControlName="status">
-          <option value="repair">repair</option>
-          <option value="ready for pickup">ready for pickup</option>
-        </select>
-      </div>
-      <div>
-        <button type="submit" [disabled]="form.invalid" class="bg-indigo-400 hover:bg-indigo-300 dark:bg-indigo-700 px-2 py-1 dark:hover:bg-indigo-600 rounded">
-          save
-        </button>
-        <button type="button" (click)="deleteAppointment()" class="bg-red-400 hover:bg-red-300 dark:bg-red-700 px-2 py-1 dark:hover:bg-red-600 rounded">
-          Delete
-        </button>
+
+      <div class="form-buttons">
+        <button type="submit" [disabled]="form.invalid" class="btn-save">Save</button>
+        <button type="button" (click)="deleteAppointment()" class="btn-delete">Delete</button>
       </div>
     </form>
   `,
-  styles: [],
+  styles: [`
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 8px;
+      background-color: #f7f9fc;
+    }
+    .form-section {
+      padding: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background-color: #ffffff;
+    }
+    h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      color: #1f2937;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      color: #4b5563;
+    }
+    .input-field {
+      padding: 0.5rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+    }
+    .error {
+      color: #f87171;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+    .form-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+    .btn-save, .btn-delete {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #ffffff;
+    }
+    .btn-save {
+      background-color: #4f46e5;
+    }
+    .btn-save:hover {
+      background-color: #6366f1;
+    }
+    .btn-delete {
+      background-color: #f87171;
+    }
+    .btn-delete:hover {
+      background-color: #fb7185;
+    }
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 1rem;
+      }
+      .input-field {
+        font-size: 0.9rem;
+      }
+      h3 {
+        font-size: 1rem;
+      }
+    }
+  `],
 })
 export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   @Input() appointment!: Appointment;
   @Output() appointmentSave = new EventEmitter<Partial<Appointment>>();
-  @Output() appointmentDelete = new EventEmitter<number>(); // New EventEmitter for Delete action
+  @Output() appointmentDelete = new EventEmitter<number>();
 
-  form!: FormGroup; // Declare the form here
+  form!: FormGroup;
+  branches: Branch[] = [];  // Array für die Standorte
 
-  constructor(private readonly openingHoursValidatorService: OpeningHoursValidatorService) {}
+  constructor(
+    private readonly openingHoursValidatorService: OpeningHoursValidatorService,
+    private readonly location: Location,
+    private readonly branchesService: BranchesService  // Injektion des BranchesService
+  ) {}
 
   ngOnInit(): void {
-    // Initialize the form here
+    // Formularinitialisierung
     this.form = new FormGroup({
       vehicleOwner: new FormControl('', { validators: Validators.required, nonNullable: true }),
       date: new FormControl('', { validators: Validators.required, nonNullable: true }),
@@ -80,15 +180,18 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       asyncValidators: [this.openingHoursValidatorService.openingHoursValidator('time', 'branch')],
     });
 
-    // Wenn ein Termin übergeben wird, füllen wir das Formular aus
     if (this.appointment) {
       this.form.patchValue(this.appointment);
     }
+
+    // Lade die Standorte
+    this.branchesService.getBranches().subscribe((branches: Branch[]) => {
+      this.branches = branches;  // Setze die Standorte im lokalen Array
+    });
   }
 
   ngOnChanges(): void {
-    // Sicherstellen, dass das Formular existiert, bevor es aktualisiert wird
-    if (this.appointment && this.form) {
+    if (this.appointment != null) {
       this.form.patchValue(this.appointment);
     }
   }
@@ -97,6 +200,9 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
     if (this.form.valid) {
       this.appointmentSave.emit(this.form.value);
       console.log('saving value', this.form.value);
+
+      // Nach dem Speichern zur vorherigen Seite zurückkehren
+      this.location.back();
     } else {
       console.log('Form is invalid');
     }
@@ -105,8 +211,8 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   deleteAppointment() {
     if (this.appointment && this.appointment.id) {
       this.appointmentDelete.emit(this.appointment.id);
-    } else {
-      console.log('Invalid appointment ID');
+      // Nach dem Löschen zur vorherigen Seite zurückkehren
+      this.location.back();
     }
   }
 }

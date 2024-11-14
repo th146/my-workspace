@@ -31,3 +31,9 @@ export enum Role {
   Admin = 'admin',
   User = 'user',
 }
+
+export interface Branch {
+  name: string;
+  openingHoursStart: string;
+  openingHoursEnd: string;
+}
