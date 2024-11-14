@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { AppointmentsService } from '../appointments.service';
 import { map } from 'rxjs/operators';
 import { BranchesService } from '../branches.service';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'workshop-appointment-list',
@@ -13,6 +14,7 @@ import { BranchesService } from '../branches.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="form-container">
+    <button (click)="logout()" class="btn-logout">Logout</button> <!-- Logout-Button hinzugefügt -->
   <h2>Appointments</h2>
 
   <div class="branches-row">
@@ -141,6 +143,22 @@ h3 {
   cursor: pointer;
 }
 
+.btn-logout {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #6b7280; /* Grau */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background-color: #4b5563; /* Dunkleres Grau für Hover-Effekt */
+}
+
 .btn-save:hover {
   background-color: #6366f1;
 }
@@ -163,7 +181,8 @@ export class AppointmentListComponent implements OnInit {
   constructor(
     private readonly appointmentsService: AppointmentsService,
     private readonly branchesService: BranchesService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly loginService: LoginService // Injiziere LoginService
   ) {}
 
   ngOnInit(): void {
@@ -197,5 +216,11 @@ export class AppointmentListComponent implements OnInit {
 
   navigateToBranches(): void {
     this.router.navigate(['/branches']);
+  }
+
+  // Logout-Methode implementieren
+  logout(): void {
+    this.loginService.removeToken(); // Token entfernen
+    this.router.navigate(['/users/login']); // Zur Login-Seite navigieren
   }
 }
