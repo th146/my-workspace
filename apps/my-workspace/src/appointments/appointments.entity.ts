@@ -4,8 +4,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class AppointmentsEntity implements Appointment {
   @Column()
-  assignment: string;
-  @Column()
   appointmentsOwner: string;
   @Column()
   branch: string;

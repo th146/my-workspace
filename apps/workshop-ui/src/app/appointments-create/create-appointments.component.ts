@@ -226,7 +226,6 @@ export class CreateAppointmentsComponent implements OnInit {
         ...this.form.value,
         branch: this.form.value.branch ?? '',
         status: this.form.value.status ?? '',
-        assignment: this.form.value.assignment ?? 'No Assignment',
         appointmentsOwner: username,
       };
 
