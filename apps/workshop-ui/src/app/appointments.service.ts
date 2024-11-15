@@ -22,12 +22,12 @@ export class AppointmentsService {
     return this.httpClient.patch<Appointment>(`my-workspace/appointments/${id}`, appointment);
   }
 
-  // Neue Delete-Methode
+  
   deleteAppointment(id: number): Observable<void> {
     return this.httpClient.delete<void>(`my-workspace/appointments/${id}`);
   }
 
-  // Hole die Branches und deren Öffnungszeiten
+  
   getBranches(): Observable<Branch[]> {
     return this.httpClient.get<Branch[]>('my-workspace/branches');
   }

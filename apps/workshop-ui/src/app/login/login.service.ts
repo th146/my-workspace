@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LoginService {
-  private apiUrl = 'http://localhost:3000/my-workspace/auth/login';
+  private apiUrl = 'http:
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class LoginService {
     return this.http.post(
       this.apiUrl,
       { name: username, password: password },
-      { headers: headers, withCredentials: true } // Stelle sicher, dass `withCredentials: true` gesetzt ist
+      { headers: headers, withCredentials: true } 
     );
   }
 

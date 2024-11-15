@@ -9,7 +9,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // Benutzer anhand des Namens und Passworts validieren
+  
   async validateUser(name: string, password: string) {
     const user = await this.usersService.findOne(name);
     if (user && user.password === password) {
@@ -18,7 +18,7 @@ export class AuthService {
     return null;
   }
 
-  // Token generieren
+  
   async generateToken(user: any) {
     const payload = { username: user.name, sub: user.id };
     return this.jwtService.sign(payload);

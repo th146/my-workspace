@@ -2,7 +2,7 @@ import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../app/users/users.service';
 import { AuthService } from './roles/auth.service';
-import { UserLoginDto } from '../app/users/user.login.dto'; // Benutzer Login DTO
+import { UserLoginDto } from '../app/users/user.login.dto'; 
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +12,7 @@ export class AuthController {
     private readonly jwtService: JwtService,
   ) {}
 
-  // Login-Route
+  
   @Post('login')
   async login(@Body() loginDto: UserLoginDto) {
     const user = await this.authService.validateUser(loginDto.name, loginDto.password);

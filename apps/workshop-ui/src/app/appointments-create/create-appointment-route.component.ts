@@ -28,7 +28,7 @@ export class CreateAppointmentRouteComponent {
     this.appointmentsService.createAppointment(appointment).subscribe({
       next: (createdAppointment) => {
         console.log('Termin erstellt:', createdAppointment);
-        // Eventuell Redirect oder Bestätigung anzeigen
+        
       },
       error: (err) => {
         console.error('Fehler beim Erstellen des Termins:', err);

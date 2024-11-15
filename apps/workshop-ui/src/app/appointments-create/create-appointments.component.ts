@@ -185,7 +185,7 @@ export class CreateAppointmentsComponent implements OnInit {
 
   form!: FormGroup;
   branches: Branch[] = [];
-  formSubmitted = false; // Flag für das Anzeigen der Fehler bei der Formularüberprüfung
+  formSubmitted = false; 
   today: string = '';
 
   constructor(
@@ -197,7 +197,7 @@ export class CreateAppointmentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Setze das Mindestdatum auf das heutige Datum
+    
     const todayDate = new Date();
     this.today = todayDate.toISOString().split('T')[0];
     this.form = new FormGroup({
@@ -223,7 +223,7 @@ export class CreateAppointmentsComponent implements OnInit {
   }
 
   createAppointmentSubmit() {
-    this.formSubmitted = true; // Markiere das Formular als abgesendet
+    this.formSubmitted = true; 
     if (this.form.valid) {
       const username = this.authService.getUsernameFromToken();
       const appointmentToSend: Appointment = {
@@ -238,7 +238,7 @@ export class CreateAppointmentsComponent implements OnInit {
           console.log('Appointment created:', createdAppointment);
           this.appointmentCreated.emit(createdAppointment);
           this.form.reset();
-          this.formSubmitted = false; // Setze das Flag zurück
+          this.formSubmitted = false; 
           this.location.back();
         },
         error: (error) => {

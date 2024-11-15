@@ -2,8 +2,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; // Router importieren
-import { LoginService } from './login.service'; // LoginService importieren
+import { Router } from '@angular/router'; 
+import { LoginService } from './login.service'; 
 
 @Component({
   selector: 'app-login',
@@ -46,19 +46,19 @@ import { LoginService } from './login.service'; // LoginService importieren
   styles: [],
 })
 export class LoginComponent implements OnInit {
-  form!: FormGroup; // Formular-Objekt
+  form!: FormGroup; 
   token: string | null = null;
   
   constructor(
-    private loginService: LoginService,  // LoginService injizieren
-    private router: Router               // Router injizieren
+    private loginService: LoginService,  
+    private router: Router               
   ) {}
 
   ngOnInit(): void {
-    // Formular mit Validierung initialisieren
+    
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),  // Name-Feld validieren
-      password: new FormControl('', [Validators.required]),  // Passwort-Feld validieren
+      name: new FormControl('', [Validators.required]),  
+      password: new FormControl('', [Validators.required]),  
     });
   }
 
@@ -69,22 +69,22 @@ export class LoginComponent implements OnInit {
         password: this.form.value.password,
       };
   
-      // Login-Anfrage an den Service senden
+      
       this.loginService.login(loginData.name, loginData.password).subscribe({
         next: (response) => {
           console.log('Login erfolgreich:', response);
   
-          // Überprüfen, ob das access_token im Response-Body enthalten ist
+          
           if (response) {
-            // Token speichern (z.B. in localStorage)
-            const token = response.access_token || response; // Angenommen, der Token befindet sich in der `access_token` Eigenschaft
+            
+            const token = response.access_token || response; 
             this.loginService.saveToken(token);
-            this.token = token;  // Token in der Komponente speichern
+            this.token = token;  
           
-            // Sicherstellen, dass der Token gespeichert wurde
-            console.log('Token gespeichert:', localStorage.getItem('access_token'));  // Debugging-Ausgabe
+            
+            console.log('Token gespeichert:', localStorage.getItem('access_token'));  
           
-            // Weiterleitung zur appointments-Seite
+            
             this.router.navigate(['/appointments']);
           } else {
             console.error('Token nicht im Response gefunden!');

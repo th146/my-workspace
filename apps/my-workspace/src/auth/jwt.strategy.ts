@@ -15,13 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // Die Validierung des JWT
+  
   async validate(payload: JwtPayload) {
     const { sub } = payload;
-    const user = await this.usersService.findOne(payload.name);  // Holen des Benutzers anhand der ID
+    const user = await this.usersService.findOne(payload.name);  
     if (!user) {
       throw new Error('User not found');
     }
-    return { id: user.id, name: user.name, role: user.role };  // Füge die Rolle hinzu
+    return { id: user.id, name: user.name, role: user.role };  
   }
 }

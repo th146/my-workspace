@@ -9,19 +9,19 @@ export class AuthService {
   constructor() { }
 
   saveToken(token: string): void {
-    console.log('Saving token:', token);  // Ausgabe des Tokens
+    console.log('Saving token:', token);  
     localStorage.setItem('access_token', token);
   }
 
   getToken(): string | null {
     const token = localStorage.getItem('access_token');
-    console.log('Retrieved token:', token);  // Ausgabe des abgerufenen Tokens
+    console.log('Retrieved token:', token);  
     return token;
   }
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('access_token');
-    console.log('Token gefunden:', token);  // Überprüfung in der Konsole
+    console.log('Token gefunden:', token);  
     return !!token;
   }
   
@@ -37,9 +37,9 @@ export class AuthService {
       return '';
     }
     const [, payload] = token.split('.');
-    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); // Base64URL Dekodierung
-    const { username } = JSON.parse(decodedPayload); // Benutzername aus dem Payload extrahieren
-    return username ?? ''; // Rückgabe des Benutzernamens
+    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); 
+    const { username } = JSON.parse(decodedPayload); 
+    return username ?? ''; 
   }
 
   getRoleFromToken(): string {
@@ -48,8 +48,8 @@ export class AuthService {
       return '';
     }
     const [, payload] = token.split('.');
-    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); // Base64URL Dekodierung
-    const { role } = JSON.parse(decodedPayload); // Benutzername aus dem Payload extrahieren
-    return role ?? ''; // Rückgabe des Benutzernamens
+    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); 
+    const { role } = JSON.parse(decodedPayload); 
+    return role ?? ''; 
   }
 }

@@ -27,7 +27,7 @@ export class AppointmentsService {
     return this.appointmentsRepo.save({ ...candidate, ...appointment });
   }
 
-  // Backend-Methode für das Löschen eines Termins
+  
   async deleteAppointment(id: number): Promise<void> {
     const candidate = await this.getById(id);
 
@@ -35,7 +35,7 @@ export class AppointmentsService {
       throw new Error(`Appointment with id ${id} not found`);
     }
 
-    await this.appointmentsRepo.remove(candidate); // Löscht den Termin aus der DB
+    await this.appointmentsRepo.remove(candidate); 
   }
   
   async createAppointment(appointmentData: Appointment): Promise<Appointment> {

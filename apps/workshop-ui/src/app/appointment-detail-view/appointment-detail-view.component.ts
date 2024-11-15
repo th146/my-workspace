@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Appointment, Branch } from '@my-workspace/api-interfaces'; // Importiere das Branch Interface
+import { Appointment, Branch } from '@my-workspace/api-interfaces'; 
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
 import { Location } from '@angular/common';
 import { BranchesService } from '../branches.service';
@@ -185,26 +185,26 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   isEditable = false;
 
   form!: FormGroup;
-  branches: Branch[] = [];  // Array für die Standorte
+  branches: Branch[] = [];  
 
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly location: Location,
-    private readonly branchesService: BranchesService,  // Injektion des BranchesService
-    private readonly authService: AuthService, // Injektion des AuthService
+    private readonly branchesService: BranchesService,  
+    private readonly authService: AuthService, 
   ) {}
 
   ngOnInit(): void {
 
     const role = this.authService.getRoleFromToken();
-    this.isAdmin = role === 'admin';  // Setze das isAdmin-Flag auf true, wenn der Benutzer ein Admin ist
-    this.isUser = role === 'user';  // Setze das isUser-Flag auf true, wenn der Benutzer ein User ist
+    this.isAdmin = role === 'admin';  
+    this.isUser = role === 'user';  
 
     if (this.isAdmin || (this.appointment && this.appointment.appointmentsOwner === this.authService.getUsernameFromToken())) {
       this.isEditable = true;
     }
 
-    // Formularinitialisierung
+    
     this.form = new FormGroup({
       vehicleOwner: new FormControl('', { validators: Validators.required, nonNullable: true }),
       date: new FormControl('', { validators: Validators.required, nonNullable: true }),
@@ -220,14 +220,14 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       this.form.patchValue(this.appointment);
     }
 
-    // Deaktivieren der FormControls, wenn isEditable = false
+    
     if (!this.isEditable) {
       this.form.disable();
     }
 
-    // Lade die Standorte
+    
     this.branchesService.getBranches().subscribe((branches: Branch[]) => {
-      this.branches = branches;  // Setze die Standorte im lokalen Array
+      this.branches = branches;  
     });
   }
 
@@ -242,7 +242,7 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
       this.appointmentSave.emit(this.form.value);
       console.log('saving value', this.form.value);
 
-      // Nach dem Speichern zur vorherigen Seite zurückkehren
+      
       this.location.back();
     } else {
       console.log('Form is invalid');
@@ -252,12 +252,12 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   deleteAppointment() {
     if (this.appointment && this.appointment.id) {
       this.appointmentDelete.emit(this.appointment.id);
-      // Nach dem Löschen zur vorherigen Seite zurückkehren
+      
       this.location.back();
     }
   }
 
   goBack() {
-    this.location.back(); // Zurück zur vorherigen Seite
+    this.location.back(); 
   }
 }
