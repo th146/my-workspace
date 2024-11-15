@@ -1,15 +1,14 @@
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Role } from './users.entity';
-import { UserLoginDto } from './user.login.dto'; // Wird in AuthController verwendet
 
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService, // Keine Notwendigkeit für AuthService hier
+    private readonly usersService: UsersService,
   ) {}
 
-  // Create-Route (bleibt unverändert)
+  // Create-Route
   @Post('create')
   async createUser(
     @Body() userData: { name: string; plainPassword: string; role?: Role }

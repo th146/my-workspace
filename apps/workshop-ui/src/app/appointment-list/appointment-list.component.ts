@@ -185,12 +185,11 @@ export class AppointmentListComponent implements OnInit {
     private readonly appointmentsService: AppointmentsService,
     private readonly branchesService: BranchesService,
     private readonly router: Router,
-    private readonly loginService: LoginService, // Injiziere LoginService,
-    private readonly authService: AuthService // Injiziere AuthService
+    private readonly loginService: LoginService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Prüfen, ob der Benutzer "admin" ist
     const role = this.authService.getRoleFromToken();
     const name = this.authService.getUsernameFromToken();
     console.log('Role:', role);
@@ -229,7 +228,6 @@ export class AppointmentListComponent implements OnInit {
     this.router.navigate(['/branches']);
   }
 
-  // Logout-Methode implementieren
   logout(): void {
     this.loginService.removeToken(); // Token entfernen
     this.router.navigate(['/users/login']); // Zur Login-Seite navigieren

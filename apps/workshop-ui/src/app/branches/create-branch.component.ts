@@ -147,7 +147,7 @@ export class CreateBranchComponent implements OnInit {
 
   constructor(
     private readonly branchesService: BranchesService,
-    private readonly location: Location // Injection des Location Services
+    private readonly location: Location
   ) {}
 
   ngOnInit(): void {

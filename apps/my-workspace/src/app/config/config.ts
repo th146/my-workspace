@@ -21,12 +21,12 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
   },
   dbName: {
     format: String,
-    default: 'newdb', // anpassen auf 'newDB' (kleingeschrieben)
+    default: 'newdb',
     env: 'DB_NAME',
   },
   dbUser: {
     format: String,
-    default: 'postgres', // anpassen auf 'root'
+    default: 'postgres',
     env: 'DB_USER',
   },
   dbPassword: {

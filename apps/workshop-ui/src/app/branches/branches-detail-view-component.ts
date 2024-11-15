@@ -198,7 +198,7 @@ export class BranchDetailViewComponent implements OnInit, OnChanges {
 
   deleteBranch() {
     if (this.branch && this.branch.id) {
-      this.branchDelete.emit(this.branch.id);  // Hier wird nun die ID übergeben
+      this.branchDelete.emit(this.branch.id);
       // Nach dem Löschen zur vorherigen Seite zurückkehren
       this.location.back();
     }

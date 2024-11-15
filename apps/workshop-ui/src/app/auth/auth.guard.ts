@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    console.log('Checking authentication for route:', state.url);  // Gibt die URL der angeforderten Route aus
+    console.log('Checking authentication for route:', state.url);
   
     // `access_token` aus dem LocalStorage holen und Leerzeichen entfernen
     const token = localStorage.getItem("access_token")?.trim();
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
           // Payload in JSON-Objekt umwandeln
           const jsonPayload = JSON.parse(decodedPayload);
   
-          // Username aus dem Payload extrahieren
+          // Username und Role aus dem Payload extrahieren
           console.log("Username:", jsonPayload.username);
           console.log("Role:", jsonPayload.role);
 

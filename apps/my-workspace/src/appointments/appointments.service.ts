@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Appointment } from '@my-workspace/api-interfaces';
-import { isTimeInInterval } from '@my-workspace/shared'
 import { InjectRepository } from "@nestjs/typeorm";
 import { AppointmentsEntity } from "./appointments.entity";
 import { Repository } from "typeorm";
-import { BranchesService } from '../branches/branches.service';
 
 @Injectable()
 export class AppointmentsService {

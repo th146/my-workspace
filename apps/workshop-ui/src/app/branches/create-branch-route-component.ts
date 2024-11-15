@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CreateBranchComponent } from './create-branch.component';
-import { BranchesService } from '../branches.service'; // Dein BranchesService
+import { BranchesService } from '../branches.service';
 import { Branch } from '@my-workspace/api-interfaces';
 
 @Component({
@@ -28,7 +28,6 @@ export class CreateBranchRouteComponent {
     this.branchesService.createBranch(branch).subscribe({
       next: (createdBranch) => {
         console.log('Branch created:', createdBranch);
-        // Eventuell Redirect oder Bestätigung anzeigen
       },
       error: (err) => {
         console.error('Error creating branch:', err);

@@ -18,7 +18,7 @@ export class LoginService {
     return this.http.post(
       this.apiUrl,
       { name: username, password: password },
-      { headers: headers, withCredentials: true } // Stelle sicher, dass `withCredentials: true` gesetzt ist
+      { headers: headers, withCredentials: true }
     );
   }
 

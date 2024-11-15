@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Role, UsersEntity } from './users.entity';  // Stelle sicher, dass 'Role' korrekt definiert ist
+import { Role, UsersEntity } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +17,7 @@ export class UsersService {
     // Benutzer erstellen ohne Passwort zu hashen
     const newUser = this.userRepository.create({
       name: userData.name,
-      password: userData.password,  // Passwort wird direkt gespeichert
+      password: userData.password,
       role,
     });
 

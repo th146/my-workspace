@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Appointment, Branch } from '@my-workspace/api-interfaces'; // Importiere das Branch Interface
+import { Appointment, Branch } from '@my-workspace/api-interfaces';
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
 import { Location } from '@angular/common';
 import { BranchesService } from '../branches.service';
@@ -190,8 +190,8 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly location: Location,
-    private readonly branchesService: BranchesService,  // Injektion des BranchesService
-    private readonly authService: AuthService, // Injektion des AuthService
+    private readonly branchesService: BranchesService,
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit(): void {

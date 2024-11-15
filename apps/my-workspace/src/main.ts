@@ -7,10 +7,10 @@ async function bootstrap() {
 
   // CORS-Konfiguration
   app.enableCors({
-    origin: 'http://localhost:4200', // Erlaube Anfragen von deinem Angular-Frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Erlaube nur bestimmte HTTP-Methoden
-    allowedHeaders: ['Content-Type', 'Authorization'], // Erlaube bestimmte Header
-    credentials: true, // Erlaube das Senden von Cookies (wenn du JWT mit Cookies verwendest)
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   });
 
   const globalPrefix = 'my-workspace';
