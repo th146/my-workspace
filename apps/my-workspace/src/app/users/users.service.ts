@@ -35,4 +35,10 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { name: name } });
     return user?.role === Role.Admin;
   }
+
+  // Rolle des Benutzers finden
+  async findRole(name: string): Promise<Role | undefined> {
+    const user = await this.userRepository.findOne({ where: { name } });
+    return user?.role;
+  }
 }

@@ -5,6 +5,7 @@ import { Appointment, Branch } from '@my-workspace/api-interfaces'; // Importier
 import { OpeningHoursValidatorService } from '../appointments/opening-hours-validator.service';
 import { Location } from '@angular/common';
 import { BranchesService } from '../branches.service';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -12,62 +13,62 @@ import { BranchesService } from '../branches.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <h2>Appointment Details</h2> <!-- Überschrift hinzugefügt -->
     <form [formGroup]="form" (ngSubmit)="save()" class="form-container">
-      <div class="form-section">
-        <h3>Vehicle Information</h3>
-        <div class="form-group">
-          <label>Owner</label>
-          <input type="text" formControlName="vehicleOwner" class="input-field">
-          <div class="error" *ngIf="form.controls['vehicleOwner'].invalid">Please provide an owner</div>
-        </div>
-        <div class="form-group">
-          <label>Registration</label>
-          <input type="text" formControlName="vehicleRegNo" class="input-field">
-          <div class="error" *ngIf="form.controls['vehicleRegNo'].invalid">Please provide a registration number</div>
-        </div>
-      </div>
+  <div class="form-section">
+    <h3>Vehicle Information</h3>
+    <div class="form-group">
+      <label>Owner</label>
+      <input type="text" formControlName="vehicleOwner" class="input-field" [disabled]="!isEditable">
+      <div class="error" *ngIf="form.controls['vehicleOwner'].invalid && isEditable">Please provide an owner</div>
+    </div>
+    <div class="form-group">
+      <label>Registration</label>
+      <input type="text" formControlName="vehicleRegNo" class="input-field" [disabled]="!isEditable">
+      <div class="error" *ngIf="form.controls['vehicleRegNo'].invalid && isEditable">Please provide a registration number</div>
+    </div>
+  </div>
 
-      <div class="form-section">
-        <h3>Date and Time</h3>
-        <div class="form-group">
-          <label>Date</label>
-          <input type="date" formControlName="date" class="input-field">
-          <div class="error" *ngIf="form.controls['date'].invalid">Please provide a valid date</div>
-        </div>
-        <div class="form-group">
-          <label>Time</label>
-          <input type="time" formControlName="time" class="input-field">
-          <div class="error" *ngIf="form.controls['time'].invalid">Please provide a valid time</div>
-        </div>
-        <div class="form-group">
-          <label>Branch</label>
-          <select formControlName="branch" class="input-field">
-            <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
-          </select>
-          <div class="error" *ngIf="form.controls['branch'].invalid">Please select a branch</div>
-          <div class="error" *ngIf="form.hasError('openingHours')">{{ form.getError('openingHours') }}</div>
-        </div>
-      </div>
+  <div class="form-section">
+    <h3>Date and Time</h3>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" formControlName="date" class="input-field" [disabled]="!isEditable">
+      <div class="error" *ngIf="form.controls['date'].invalid && isEditable">Please provide a valid date</div>
+    </div>
+    <div class="form-group">
+      <label>Time</label>
+      <input type="time" formControlName="time" class="input-field" [disabled]="!isEditable">
+      <div class="error" *ngIf="form.controls['time'].invalid && isEditable">Please provide a valid time</div>
+    </div>
+    <div class="form-group">
+      <label>Branch</label>
+      <select formControlName="branch" class="input-field" [disabled]="!isEditable">
+        <option *ngFor="let branch of branches" [value]="branch.name">{{ branch.name }}</option>
+      </select>
+      <div class="error" *ngIf="form.controls['branch'].invalid && isEditable">Please select a branch</div>
+      <div class="error" *ngIf="form.hasError('openingHours') && isEditable">{{ form.getError('openingHours') }}</div>
+    </div>
+  </div>
 
-      <div class="form-section">
-        <h3>Status</h3>
-        <div class="form-group">
-          <label>Status</label>
-          <select formControlName="status" class="input-field">
-            <option value="repair">Repair</option>
-            <option value="ready for pickup">Ready for pickup</option>
-          </select>
-        </div>
-      </div>
+  <div class="form-section">
+    <h3>Status</h3>
+    <div class="form-group">
+      <label>Status</label>
+      <select formControlName="status" class="input-field" [disabled]="!isEditable">
+        <option value="repair">Repair</option>
+        <option value="ready for pickup">Ready for pickup</option>
+      </select>
+    </div>
+  </div>
 
-      <!-- Buttons -->
-      <div class="form-buttons">
-        <button type="submit" [disabled]="form.invalid" class="btn-save">Save</button>
-        <button type="button" (click)="deleteAppointment()" class="btn-delete">Delete</button>
-        <a class="btn-back" (click)="goBack()">Back to list</a>
-      </div>
-    </form>
+  <!-- Buttons -->
+  <div class="form-buttons">
+    <button *ngIf="isEditable" type="submit" [disabled]="form.invalid" class="btn-save">Save</button>
+    <button *ngIf="isAdmin && isEditable" (click)="deleteAppointment()" class="btn-delete">Delete</button>
+    <a class="btn-back" (click)="goBack()">Back to list</a>
+  </div>
+</form>
+
   `,
   styles: [`
     .form-container {
@@ -179,6 +180,9 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   @Input() appointment!: Appointment;
   @Output() appointmentSave = new EventEmitter<Partial<Appointment>>();
   @Output() appointmentDelete = new EventEmitter<number>();
+  isAdmin = false;
+  isUser = false;
+  isEditable = false;
 
   form!: FormGroup;
   branches: Branch[] = [];  // Array für die Standorte
@@ -186,10 +190,20 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly location: Location,
-    private readonly branchesService: BranchesService  // Injektion des BranchesService
+    private readonly branchesService: BranchesService,  // Injektion des BranchesService
+    private readonly authService: AuthService, // Injektion des AuthService
   ) {}
 
   ngOnInit(): void {
+
+    const role = this.authService.getRoleFromToken();
+    this.isAdmin = role === 'admin';  // Setze das isAdmin-Flag auf true, wenn der Benutzer ein Admin ist
+    this.isUser = role === 'user';  // Setze das isUser-Flag auf true, wenn der Benutzer ein User ist
+
+    if (this.isAdmin || (this.appointment && this.appointment.appointmentsOwner === this.authService.getUsernameFromToken())) {
+      this.isEditable = true;
+    }
+
     // Formularinitialisierung
     this.form = new FormGroup({
       vehicleOwner: new FormControl('', { validators: Validators.required, nonNullable: true }),
@@ -204,6 +218,11 @@ export class AppointmentDetailViewComponent implements OnInit, OnChanges {
 
     if (this.appointment) {
       this.form.patchValue(this.appointment);
+    }
+
+    // Deaktivieren der FormControls, wenn isEditable = false
+    if (!this.isEditable) {
+      this.form.disable();
     }
 
     // Lade die Standorte

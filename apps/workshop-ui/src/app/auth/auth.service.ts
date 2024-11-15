@@ -41,4 +41,15 @@ export class AuthService {
     const { username } = JSON.parse(decodedPayload); // Benutzername aus dem Payload extrahieren
     return username ?? ''; // Rückgabe des Benutzernamens
   }
+
+  getRoleFromToken(): string {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      return '';
+    }
+    const [, payload] = token.split('.');
+    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); // Base64URL Dekodierung
+    const { role } = JSON.parse(decodedPayload); // Benutzername aus dem Payload extrahieren
+    return role ?? ''; // Rückgabe des Benutzernamens
+  }
 }

@@ -7,6 +7,7 @@ import { AppointmentsService } from '../appointments.service';
 import { map } from 'rxjs/operators';
 import { BranchesService } from '../branches.service';
 import { LoginService } from '../login/login.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'workshop-appointment-list',
@@ -41,11 +42,11 @@ import { LoginService } from '../login/login.service';
   <div class="form-buttons">
     <button (click)="navigateToCreateAppointment()" class="btn-save">
       Create New Appointment
-    </button>
-    <button (click)="navigateToBranches()" class="btn-save">
-      Branches List
-    </button>
-  </div>
+      </button>
+    <!-- Zeige den Button nur an, wenn der Benutzer "admin" ist -->
+        <button *ngIf="isAdmin" (click)="navigateToBranches()" class="btn-save">
+          Branches List
+        </button>
 </div>
   `,
   styles: [`
@@ -177,15 +178,25 @@ h3 {
 export class AppointmentListComponent implements OnInit {
   appointmentsByBranch$!: Observable<{ branch: string; appointments: Appointment[] }[]>;
   branches: Branch[] = [];
+  isAdmin = false; // isAdmin-Flag hinzugefügt
+  isUser = false; // isUser-Flag hinzugefügt
 
   constructor(
     private readonly appointmentsService: AppointmentsService,
     private readonly branchesService: BranchesService,
     private readonly router: Router,
-    private readonly loginService: LoginService // Injiziere LoginService
+    private readonly loginService: LoginService, // Injiziere LoginService,
+    private readonly authService: AuthService // Injiziere AuthService
   ) {}
 
   ngOnInit(): void {
+    // Prüfen, ob der Benutzer "admin" ist
+    const role = this.authService.getRoleFromToken();
+    const name = this.authService.getUsernameFromToken();
+    console.log('Role:', role);
+    this.isAdmin = role === 'admin';
+    this.isUser = role === 'user';
+
     this.branchesService.getBranches().subscribe({
       next: (branches) => {
         this.branches = branches;

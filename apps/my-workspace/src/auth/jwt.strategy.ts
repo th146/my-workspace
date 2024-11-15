@@ -17,7 +17,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // Die Validierung des JWT
   async validate(payload: JwtPayload) {
-    const user = await this.usersService.findOne(payload.name);
-    return user; // Hier kannst du das Benutzerobjekt zurückgeben, das in der Anfrage verfügbar ist
+    const { sub } = payload;
+    const user = await this.usersService.findOne(payload.name);  // Holen des Benutzers anhand der ID
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return { id: user.id, name: user.name, role: user.role };  // Füge die Rolle hinzu
   }
 }

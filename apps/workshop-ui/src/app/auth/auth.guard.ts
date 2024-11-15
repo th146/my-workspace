@@ -38,6 +38,7 @@ export class AuthGuard implements CanActivate {
   
           // Username aus dem Payload extrahieren
           console.log("Username:", jsonPayload.username);
+          console.log("Role:", jsonPayload.role);
         } catch (error) {
           console.error("Fehler beim Decodieren oder Parsen des Tokens:", error);
         }
