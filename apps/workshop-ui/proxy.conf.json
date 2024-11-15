@@ -1,6 +1,6 @@
 {
-  "/workshop-api": {
-    "target": "http://localhost:3333",
+  "/my-workspace": {
+    "target": "http://localhost:3000",
     "secure": false
   }
 }
