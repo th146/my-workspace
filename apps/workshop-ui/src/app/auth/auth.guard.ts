@@ -39,6 +39,12 @@ export class AuthGuard implements CanActivate {
           // Username aus dem Payload extrahieren
           console.log("Username:", jsonPayload.username);
           console.log("Role:", jsonPayload.role);
+
+          if (state.url.includes('branch') && jsonPayload.role !== 'admin') {
+            console.log('User does not have admin role, redirecting to login');
+            this.router.navigate(['appointments']); // Weiterleitung, falls keine admin Rolle
+            return false;
+          }
         } catch (error) {
           console.error("Fehler beim Decodieren oder Parsen des Tokens:", error);
         }
