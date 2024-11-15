@@ -164,7 +164,7 @@ export class BranchDetailViewComponent implements OnInit, OnChanges {
   constructor(
     private readonly branchesService: BranchesService,
     private readonly location: Location
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -189,7 +189,7 @@ export class BranchDetailViewComponent implements OnInit, OnChanges {
       this.branchSave.emit(this.form.value);
       console.log('Saving branch', this.form.value);
 
-
+      // Nach dem Speichern zur vorherigen Seite zurückkehren
       this.location.back();
     } else {
       console.log('Form is invalid');
@@ -198,13 +198,13 @@ export class BranchDetailViewComponent implements OnInit, OnChanges {
 
   deleteBranch() {
     if (this.branch && this.branch.id) {
-      this.branchDelete.emit(this.branch.id);
-
+      this.branchDelete.emit(this.branch.id);  // Hier wird nun die ID übergeben
+      // Nach dem Löschen zur vorherigen Seite zurückkehren
       this.location.back();
     }
   }
 
   goBack() {
-    this.location.back();
+    this.location.back(); // Zurück zur vorherigen Seite
   }
 }

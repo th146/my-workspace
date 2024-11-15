@@ -185,19 +185,19 @@ export class CreateAppointmentsComponent implements OnInit {
 
   form!: FormGroup;
   branches: Branch[] = [];
-  formSubmitted = false;
+  formSubmitted = false; // Flag für das Anzeigen der Fehler bei der Formularüberprüfung
   today: string = '';
 
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly appointmentsService: AppointmentsService,
-    private readonly branchesService: BranchesService,
+    private readonly branchesService: BranchesService, 
     private readonly location: Location,
     private readonly authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
+    // Setze das Mindestdatum auf das heutige Datum
     const todayDate = new Date();
     this.today = todayDate.toISOString().split('T')[0];
     this.form = new FormGroup({
@@ -223,7 +223,7 @@ export class CreateAppointmentsComponent implements OnInit {
   }
 
   createAppointmentSubmit() {
-    this.formSubmitted = true;
+    this.formSubmitted = true; // Markiere das Formular als abgesendet
     if (this.form.valid) {
       const username = this.authService.getUsernameFromToken();
       const appointmentToSend: Appointment = {
@@ -238,7 +238,7 @@ export class CreateAppointmentsComponent implements OnInit {
           console.log('Appointment created:', createdAppointment);
           this.appointmentCreated.emit(createdAppointment);
           this.form.reset();
-          this.formSubmitted = false;
+          this.formSubmitted = false; // Setze das Flag zurück
           this.location.back();
         },
         error: (error) => {
@@ -248,7 +248,7 @@ export class CreateAppointmentsComponent implements OnInit {
     } else {
       console.error('Form is not valid');
     }
-  }
+  }  
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.form.get(fieldName);

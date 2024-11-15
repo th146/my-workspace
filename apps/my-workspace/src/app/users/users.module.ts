@@ -1,4 +1,4 @@
-
+// users.module.ts
 import { Module, forwardRef } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
@@ -14,4 +14,4 @@ import { UsersEntity } from './users.entity';
   controllers: [UsersController],
   exports: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}

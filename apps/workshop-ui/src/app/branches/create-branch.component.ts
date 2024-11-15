@@ -147,8 +147,8 @@ export class CreateBranchComponent implements OnInit {
 
   constructor(
     private readonly branchesService: BranchesService,
-    private readonly location: Location
-  ) { }
+    private readonly location: Location // Injection des Location Services
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -169,7 +169,7 @@ export class CreateBranchComponent implements OnInit {
           console.log('Branch created:', createdBranch);
           this.branchCreated.emit(createdBranch);
           this.form.reset();
-          this.location.back();
+          this.location.back(); // Zurück zur vorherigen Seite
         },
         error: (err) => {
           console.error('Error creating branch:', err);
@@ -181,6 +181,6 @@ export class CreateBranchComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.location.back(); // Zurück zur vorherigen Seite, wenn der "Back" Button geklickt wird
   }
 }
