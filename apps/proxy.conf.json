@@ -1,7 +1,5 @@
 {
-    "/my-workspace": {
-      "target": "http://localhost:3000",
-      "secure": false
-    }
+  "/my-workspace": {
+    "target": "http:"secure": false
   }
-  
+}

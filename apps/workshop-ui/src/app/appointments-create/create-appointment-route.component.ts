@@ -22,13 +22,13 @@ import { Appointment } from '@my-workspace/api-interfaces';
 export class CreateAppointmentRouteComponent {
   constructor(
     private readonly appointmentsService: AppointmentsService
-  ) {}
+  ) { }
 
   createAppointment(appointment: Partial<Appointment>) {
     this.appointmentsService.createAppointment(appointment).subscribe({
       next: (createdAppointment) => {
         console.log('Termin erstellt:', createdAppointment);
-        // Eventuell Redirect oder Bestätigung anzeigen
+
       },
       error: (err) => {
         console.error('Fehler beim Erstellen des Termins:', err);

@@ -16,18 +16,18 @@ export class AppointmentsService {
   }
 
   async getById(id: number): Promise<Appointment | null> {
-    return this.appointmentsRepo.findOne({where: {id}})
+    return this.appointmentsRepo.findOne({ where: { id } })
   }
 
   async updateAppointment(id: number, appointment: Partial<Appointment>): Promise<Appointment> {
     const candidate = await this.getById(id);
-  
+
     if (!candidate) throw new Error(`No appointment with id ${id} found.`);
 
     return this.appointmentsRepo.save({ ...candidate, ...appointment });
   }
 
-  // Backend-Methode für das Löschen eines Termins
+
   async deleteAppointment(id: number): Promise<void> {
     const candidate = await this.getById(id);
 
@@ -35,12 +35,12 @@ export class AppointmentsService {
       throw new Error(`Appointment with id ${id} not found`);
     }
 
-    await this.appointmentsRepo.remove(candidate); // Löscht den Termin aus der DB
+    await this.appointmentsRepo.remove(candidate);
   }
-  
+
   async createAppointment(appointmentData: Appointment): Promise<Appointment> {
     const newAppointment = this.appointmentsRepo.create(appointmentData);
     return this.appointmentsRepo.save(newAppointment);
   }
-  
+
 }

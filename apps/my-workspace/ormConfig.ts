@@ -6,12 +6,12 @@ import { AppointmentsEntity } from './src/appointments/appointments.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',  // oder 'postgres_local_db', je nach Netzwerkkonfiguration
+  host: 'localhost',
   port: 5432,
-  username: 'postgres',  // entsprechend der Umgebungsvariable POSTGRES_USER
-  password: 'root',  // entsprechend der Umgebungsvariable POSTGRES_PASSWORD
-  database: 'newDB', // entsprechend der Umgebungsvariable POSTGRES_DB
-  synchronize: true,  // Ermöglicht die automatische Erstellung der Tabellen, falls erforderlich
+  username: 'postgres',
+  password: 'root',
+  database: 'newDB',
+  synchronize: true,
   logging: false,
-  entities: [ AppointmentsEntity, UsersEntity ],
+  entities: [AppointmentsEntity, UsersEntity],
 });

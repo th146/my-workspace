@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [RouterOutlet],  // Hier importieren wir den RouterOutlet, damit Angular die Routen rendern kann
+  imports: [RouterOutlet],
   selector: 'workshop-root',
   template: `
     <div class="container flex justify-center items-center h-screen bg-teal-100 dark:bg-slate-800 dark:text-white">

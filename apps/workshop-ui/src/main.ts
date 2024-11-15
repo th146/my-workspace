@@ -19,11 +19,11 @@ bootstrapApplication(AppComponent, {
       { path: '', pathMatch: 'full', redirectTo: 'users/login' },
       { path: 'appointments', component: AppointmentListComponent, canActivate: [AuthGuard] },
       { path: 'users/login', component: LoginComponent },
-      { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] }, // Detailansicht
+      { path: 'appointments/:id', component: AppointmentDetailRouteComponent, canActivate: [AuthGuard] },
       { path: 'create-appointment', component: CreateAppointmentsComponent, canActivate: [AuthGuard] },
-      { path: 'branches', component: BranchesViewComponent, canActivate: [AuthGuard] }, // Hauptansicht für Branches
-      { path: 'create-branch', component: CreateBranchComponent, canActivate: [AuthGuard] }, // Erstellen eines neuen Standorts
-      { path: 'branches/:id', component: BranchDetailRouteComponent, canActivate: [AuthGuard]},
+      { path: 'branches', component: BranchesViewComponent, canActivate: [AuthGuard] },
+      { path: 'create-branch', component: CreateBranchComponent, canActivate: [AuthGuard] },
+      { path: 'branches/:id', component: BranchDetailRouteComponent, canActivate: [AuthGuard] },
     ]),
     importProvidersFrom(HttpClientModule)
   ]

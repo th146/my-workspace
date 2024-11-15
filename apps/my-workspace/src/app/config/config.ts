@@ -21,12 +21,12 @@ export const configSchema: Convict.Schema<WorkshopApiConfig> = {
   },
   dbName: {
     format: String,
-    default: 'newdb', // anpassen auf 'newDB' (kleingeschrieben)
+    default: 'newdb',
     env: 'DB_NAME',
   },
   dbUser: {
     format: String,
-    default: 'postgres', // anpassen auf 'root'
+    default: 'postgres',
     env: 'DB_USER',
   },
   dbPassword: {
@@ -42,7 +42,7 @@ let instance: Convict.Config<WorkshopApiConfig> | null = null;
 export function getConfig(): Convict.Config<WorkshopApiConfig> {
   if (instance === null) {
     instance = Convict.default(configSchema)
-    instance.validate({allowed: 'warn'})
+    instance.validate({ allowed: 'warn' })
     console.log(instance.toString())
   }
   return instance
