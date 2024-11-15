@@ -40,7 +40,7 @@ import { AuthService } from '../auth/auth.service';
           <h3>Terminzeit und Ort</h3>
           <div class="form-group">
             <label for="date">Date</label>
-            <input type="date" id="date" formControlName="date" class="input-field">
+            <input type="date" id="date" formControlName="date" class="input-field" [min]="today">
             <div class="error" *ngIf="isFieldInvalid('date')">
               Please provide a valid date
             </div>
@@ -186,6 +186,7 @@ export class CreateAppointmentsComponent implements OnInit {
   form!: FormGroup;
   branches: Branch[] = [];
   formSubmitted = false; // Flag für das Anzeigen der Fehler bei der Formularüberprüfung
+  today: string = '';
 
   constructor(
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
@@ -196,6 +197,9 @@ export class CreateAppointmentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Setze das Mindestdatum auf das heutige Datum
+    const todayDate = new Date();
+    this.today = todayDate.toISOString().split('T')[0];
     this.form = new FormGroup({
       vehicleOwner: new FormControl('', { validators: Validators.required, nonNullable: true }),
       date: new FormControl('', { validators: Validators.required, nonNullable: true }),
