@@ -30,4 +30,15 @@ export class AuthService {
     console.log('Clearing token');
     localStorage.removeItem('access_token');
   }
+
+  getUsernameFromToken(): string {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      return '';
+    }
+    const [, payload] = token.split('.');
+    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/')); // Base64URL Dekodierung
+    const { username } = JSON.parse(decodedPayload); // Benutzername aus dem Payload extrahieren
+    return username ?? ''; // Rückgabe des Benutzernamens
+  }
 }

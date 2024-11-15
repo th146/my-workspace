@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppointmentsService } from '../appointments.service';
 import { Location } from '@angular/common';
 import { BranchesService } from '../branches.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'workshop-create-appointments',
@@ -190,7 +191,8 @@ export class CreateAppointmentsComponent implements OnInit {
     private readonly openingHoursValidatorService: OpeningHoursValidatorService,
     private readonly appointmentsService: AppointmentsService,
     private readonly branchesService: BranchesService, 
-    private readonly location: Location 
+    private readonly location: Location,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -219,11 +221,13 @@ export class CreateAppointmentsComponent implements OnInit {
   createAppointmentSubmit() {
     this.formSubmitted = true; // Markiere das Formular als abgesendet
     if (this.form.valid) {
+      const username = this.authService.getUsernameFromToken();
       const appointmentToSend: Appointment = {
         ...this.form.value,
         branch: this.form.value.branch ?? '',
         status: this.form.value.status ?? '',
         assignment: this.form.value.assignment ?? 'No Assignment',
+        appointmentsOwner: username,
       };
 
       this.appointmentsService.createAppointment(appointmentToSend).subscribe({

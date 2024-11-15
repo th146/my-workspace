@@ -77,17 +77,19 @@ export class LoginComponent implements OnInit {
           // Überprüfen, ob das access_token im Response-Body enthalten ist
           if (response) {
             // Token speichern (z.B. in localStorage)
-            this.loginService.saveToken(response);
-            this.token = response;  // Token in der Komponente speichern
-  
+            const token = response.access_token || response; // Angenommen, der Token befindet sich in der `access_token` Eigenschaft
+            this.loginService.saveToken(token);
+            this.token = token;  // Token in der Komponente speichern
+          
             // Sicherstellen, dass der Token gespeichert wurde
             console.log('Token gespeichert:', localStorage.getItem('access_token'));  // Debugging-Ausgabe
-  
+          
             // Weiterleitung zur appointments-Seite
             this.router.navigate(['/appointments']);
           } else {
             console.error('Token nicht im Response gefunden!');
           }
+          
         },
         error: (err) => {
           console.error('Login fehlgeschlagen:', err);

@@ -5,8 +5,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class AppointmentsEntity implements Appointment {
   @Column()
   assignment: string;
-  //@Column()
-  //owner: number;
+  @Column()
+  appointmentsOwner: string;
   @Column()
   branch: string;
   @Column()

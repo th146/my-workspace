@@ -1,6 +1,7 @@
 export interface Appointment {
   id?: number;
   assignment?: string;
+  appointmentsOwner?: string;
   branch?: string;
   vehicleOwner?: string;
   vehicleRegNo?: string;
